@@ -9,13 +9,13 @@ module.exports = function(grunt) {
             expand: true,
             cwd: "./public",
             src: ["**"],
-            dest: "./dist/public"
+            dest: "./dist/server/public"
           },
           {
             expand: true,
             cwd: "./views",
             src: ["**"],
-            dest: "./dist/views"
+            dest: "./dist/server/views"
           }
         ]
       }
@@ -23,20 +23,20 @@ module.exports = function(grunt) {
     ts: {
       app: {
         files: [{
-          src: ["src/\*\*/\*.ts", "!src/.baseDir.ts"],
-          dest: "./dist"
+          src: ["server/\*\*/\*.ts", "!server/.baseDir.ts"],
+          dest: "./dist/server"
         }],
         options: {
           module: "commonjs",
           target: "es6",
           sourceMap: false,
-          rootDir: "src"
+          rootDir: "server"
         }
       }
     },
     watch: {
       ts: {
-        files: ["src/\*\*/\*.ts"],
+        files: ["server/\*\*/\*.ts"],
         tasks: ["ts"]
       },
       views: {
