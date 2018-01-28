@@ -9,6 +9,7 @@
     "lint": "npm run tslint",
     "dev": "NODE_ENV=development nodemon ./bin/www",
     "grunt": "grunt",
+    "grunt:watch": "npm run grunt watch",
     "start": "node ./bin/www"
   },
   "dependencies": {
