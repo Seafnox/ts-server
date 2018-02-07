@@ -1,0 +1,20 @@
+{
+  "port": 3000,
+  "rootUrl": "http://localhost:3000",
+  "auth": {
+    "jwtKey": "override_in_local_config_!!!"
+  },
+  "db": {
+    "name": "sale_goodman",
+    "username": "",
+    "password": ""
+  },
+  "email": {
+    "useStubs": true,
+    "auth": {
+      "user": "???",
+      "password": "???"
+    },
+    "fromNoReply": "noreply@buildapp.com"
+  }
+}

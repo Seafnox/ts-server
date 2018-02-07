@@ -1,20 +1,11 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
     "target": "es6",
-    "noImplicitAny": true,
-    "moduleResolution": "node",
+    "module": "commonjs",
     "sourceMap": true,
-    "outDir": "dist",
-    "baseUrl": ".",
-    "paths": {
-      "*": [
-        "node_modules/*",
-        "src/types/*"
-      ]
-    }
+    "outDir": "build/server",
+    "rootDir": "server",
+    "allowUnreachableCode": true
   },
-  "include": [
-    "src/**/*"
-  ]
+  "exclude": ["node_modules", "build"]
 }

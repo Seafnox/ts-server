@@ -1,116 +1,69 @@
-import * as bodyParser from "body-parser";
-import * as cookieParser from "cookie-parser";
-import * as errorHandler from "errorhandler";
-import * as express from "express";
-import * as logger from "morgan";
-import * as path from "path";
+import * as express from 'express';
+import * as morgan from 'morgan';
+import * as bodyParser from 'body-parser';
+import * as cors from 'cors';
+import * as _ from 'lodash';
+import db from './database/database';
 
-import { IndexRoute } from "./routes/index";
+import config from './config';
+import routes from './routes/routes';
+import logger from './logger';
+import pathHelper from './helpers/pathHelper';
 
-/**
- * The server.
- *
- * @class Server
- */
-export class Server {
+const app = express();
 
-  /**
-   * Bootstrap the application.
-   *
-   * @class Server
-   * @method bootstrap
-   * @static
-   * @return {ng.auto.IInjectorService} Returns the newly created injector for this app.
-   */
-  public static bootstrap(): Server {
-    return new Server();
+export default {
+  start
+};
+
+function start(port) {
+  initExpress();
+
+  routes.init(app);
+
+  initErrorHandling();
+
+  db.init();
+
+  if (config.isDevLocal) {
+    app.use(morgan('dev'));
   }
 
-  public app: express.Application;
-
-  /**
-   * Constructor.
-   *
-   * @class Server
-   * @constructor
-   */
-  constructor() {
-    // create expressjs application
-    this.app = express();
-
-    // configure application
-    this.config();
-
-    // add routes
-    this.routes();
-
-    // add api
-    this.api();
-  }
-
-  /**
-   * Create REST API routes
-   *
-   * @class Server
-   * @method api
-   */
-  public api() {
-    // empty for now
-  }
-
-  /**
-   * Configure application
-   *
-   * @class Server
-   * @method config
-   */
-  public config() {
-    // add static paths
-    this.app.use(express.static(path.join(__dirname, "public")));
-
-    // configure pug
-    this.app.set("views", path.join(__dirname, "views"));
-    this.app.set("view engine", "pug");
-
-    // mount logger
-    this.app.use(logger("dev"));
-
-    // mount json form parser
-    this.app.use(bodyParser.json());
-
-    // mount query string parser
-    this.app.use(bodyParser.urlencoded({
-      extended: true,
-    }));
-
-    // mount cookie parser middleware
-    this.app.use(cookieParser("SECRET_GOES_HERE"));
-
-    //  catch 404 and forward to error handler
-    this.app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
-        err.status = 404;
-        next(err);
+  return new Promise((resolve, reject) => {
+    app.listen(port, () => {
+      return resolve(port);
     });
+  });
+}
 
-    // error handling
-    this.app.use(errorHandler());
-  }
+function initExpress() {
+  if (config.isDevLocal) app.use(morgan('dev')); //log requests
 
-  /**
-   * Create and return Router.
-   *
-   * @class Server
-   * @method config
-   * @return void
-   */
-  private routes() {
-    const router: express.Router = express.Router();
+  app.use(bodyParser.json()); // get information from html forms
+  app.use(bodyParser.urlencoded({extended: true}));
 
-    // IndexRoute
-    IndexRoute.create(router);
+  app.use('/', express.static(pathHelper.getClientRelative('/')));
 
-    // use router middleware
-    this.app.use(router);
-  }
+  app.use(cors());
 
+  initSession();
+}
+
+function initSession() {
+  const cookieParser = require('cookie-parser');
+  app.use(cookieParser());
+}
+
+function initErrorHandling() {
+  //log unhandled errors
+  app.use((err, req, res, next) => {
+    logger.error(err);
+
+    console.log(err);
+
+    let message = _.isError(err) ? err.message : err;
+    message = config.isDevLocal ? message : 'Server Error';
+
+    res.status(500).send({error: message});
+  });
 }
