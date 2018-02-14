@@ -2,31 +2,32 @@ import * as _ from 'lodash';
 
 interface IAppError {
   code: string;
-  data: Object;
+  data: any;
   message: string;
   isAppError: boolean;
 }
 
-interface AppErrorOptions {
+interface IAppErrorData {
   code: string;
-  data?: Object;
+  data?: any;
 }
 
-export class AppError implements AppError {
+export class AppError implements IAppError {
   message = 'Server Error';
   code = '';
-  data: Object;
+  data: any;
   isAppError = true;
 
-  constructor(errorOptions) {
+  constructor(errorData: IAppErrorData | string) {
     Error.captureStackTrace(this, this.constructor);
 
-    if (_.isString(errorOptions)) {
-      this.message = errorOptions;
+    if (_.isString(errorData)) {
+      this.message = errorData as string;
     } else {
+      const appErrorData = errorData as IAppErrorData;
       this.message = 'Server Error';
-      this.data = errorOptions.data;
-      this.code = errorOptions.code;
+      this.data = appErrorData.data;
+      this.code = appErrorData.code;
     }
   }
 }

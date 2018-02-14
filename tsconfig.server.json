@@ -5,7 +5,8 @@
     "sourceMap": true,
     "outDir": "build/server",
     "rootDir": "server",
-    "allowUnreachableCode": true
+    "allowUnreachableCode": true,
+    "noUnusedLocals":true,
   },
   "exclude": ["node_modules", "build"]
 }

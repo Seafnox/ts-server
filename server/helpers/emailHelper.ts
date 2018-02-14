@@ -43,7 +43,7 @@ function getEmailTransport() {
   return nodemailer.createTransport(transportOptions);
 }
 
-async function sendEmailTemplate(templateName: string, emailData: Object, emailOptions: EmailOptions) {
+async function sendEmailTemplate(templateName: string, emailData: any, emailOptions: EmailOptions) {
   try {
     let response = await renderTemplate(templateName, emailData);
 
@@ -61,7 +61,7 @@ async function sendEmailTemplate(templateName: string, emailData: Object, emailO
   }
 }
 
-async function renderTemplate(name: string, data: Object): Promise<any> {
+async function renderTemplate(name: string, data: any): Promise<any> {
   let result = {
     body: null,
     subject: null
@@ -84,10 +84,10 @@ async function renderTemplate(name: string, data: Object): Promise<any> {
   return result;
 }
 
-function sendEmail(emailData: EmailOptions): Promise<Object> {
+function sendEmail(emailData: EmailOptions): Promise<any> {
   let emailTransport = getEmailTransport();
 
-  return new Promise<Object>((resolve, reject) => {
+  return new Promise<any>((resolve, reject) => {
     emailTransport.sendMail(emailData, (error, info) => {
       if (error) return reject(error);
 
