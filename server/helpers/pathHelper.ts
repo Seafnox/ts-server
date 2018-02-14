@@ -11,7 +11,7 @@ const profileData = {
     root: '../../..',
     data: './data',
     local: './local',
-    client: '../client/build',
+    client: './build/client',
   },
 };
 
