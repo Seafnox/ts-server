@@ -3,10 +3,10 @@ import * as _ from 'lodash';
 import db from './database';
 import seeder from './seeders/seederDefault';
 import config from '../config';
-import {error} from 'util';
+import { error } from 'util';
 
 export default {
-  createDb
+  createDb,
 };
 
 async function createDb() {
@@ -15,10 +15,10 @@ async function createDb() {
 
     await seeder.seedData(db);
 
-    console.log('DB was seeded!');
+    console.info('DB was seeded!');
   } catch (err) {
     console.error(`Data Seed error`);
-    console.log(`Check DB config values. Create DB if not exists.`);
-    console.log(`Error: ${err}`);
+    console.error(`Check DB config values. Create DB if not exists.`);
+    console.error(`Error: ${err}`);
   }
 }

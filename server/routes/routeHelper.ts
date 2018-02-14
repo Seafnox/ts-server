@@ -9,7 +9,7 @@ export default {
   get: getRout,
   put: putRout,
   post: postRout,
-  delete: deleteRout
+  delete: deleteRout,
 };
 
 function init(expressApp) {
@@ -17,25 +17,25 @@ function init(expressApp) {
 }
 
 function getRout(route, handler, options = {}) {
-  let handlers = getHandlers(handler, options);
+  const handlers = getHandlers(handler, options);
 
   app.get(route, handlers);
 }
 
 function putRout(route, handler, options = {}) {
-  let handlers = getHandlers(handler, options);
+  const handlers = getHandlers(handler, options);
 
   app.put(route, handlers);
 }
 
 function postRout(route, handler, options = {}) {
-  let handlers = getHandlers(handler, options);
+  const handlers = getHandlers(handler, options);
 
   app.post(route, handlers);
 }
 
 function deleteRout(route, handler, options = {}) {
-  let handlers = getHandlers(handler, options);
+  const handlers = getHandlers(handler, options);
 
   app.delete(route, handlers);
 }
@@ -43,7 +43,7 @@ function deleteRout(route, handler, options = {}) {
 function getHandlers(handler, options) {
   setOptionsDefaults(options);
 
-  let handlers = [];
+  const handlers = [];
 
   if (options.auth) {
     handlers.push(getAuthenticatedCheckHandler());
@@ -55,7 +55,7 @@ function getHandlers(handler, options) {
 }
 
 function setOptionsDefaults(options) {
-  //require auth by default
+  // require auth by default
   if (options.auth === undefined) {
     options.auth = true;
   }
@@ -63,14 +63,14 @@ function setOptionsDefaults(options) {
 
 function getAuthenticatedCheckHandler() {
   return (req, res, next) => {
-    let header = req.headers['authorization'] || req.headers['Authorization'];
+    const header = req.headers['authorization'] || req.headers['Authorization'];
 
-    let token = parseTokenFromHeader(header);
+    const token = parseTokenFromHeader(header);
 
     if (!token) {
       return res.status(403).send({
         success: false,
-        message: 'No token provided.'
+        message: 'No token provided.',
       });
     }
 
@@ -88,11 +88,11 @@ function getAuthenticatedCheckHandler() {
   };
 
   function parseTokenFromHeader(header) {
-    if (!header) return null;
+    if (!header) { return null; }
 
-    let prefix = 'Bearer ';
+    const prefix = 'Bearer ';
 
-    if (!_.startsWith(header, prefix)) return null;
+    if (!_.startsWith(header, prefix)) { return null; }
 
     return header.substring(prefix.length);
   }

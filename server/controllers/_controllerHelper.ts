@@ -11,7 +11,7 @@ export default {
   loadSchema,
   sendActivationEmail,
   sendResetPasswordEmail,
-  getCurrentUser
+  getCurrentUser,
 };
 
 function sendFailureMessage(error, res) {
@@ -19,14 +19,14 @@ function sendFailureMessage(error, res) {
   let message = 'Server Error';
   let status = 'error';
 
-  //Joi validation error
+  // Joi validation error
   if (error.isValidationError) {
     statusCode = 400;
     message = error.message;
     status = 'validation error';
   }
 
-  let mongooseError = _.get(error, 'response.data.error');
+  const mongooseError = _.get(error, 'response.data.error');
   if (mongooseError) {
     statusCode = 400;
     message = `Schema validation error: ${mongooseError}`;
@@ -41,16 +41,16 @@ function sendFailureMessage(error, res) {
 
   res.status(statusCode).send({
     status,
-    message
+    message,
   });
 }
 
 function logError(error) {
-  //do not log known AppErrors
-  if (error.isAppError) return;
+  // do not log known AppErrors
+  if (error.isAppError) { return; }
 
   if (config.isDevLocal) {
-    console.log(error);
+    console.error(error);
   }
 
   logger.error(error);
@@ -59,18 +59,18 @@ function logError(error) {
 function sendData(data, res) {
   res.status(200).send({
     status: 'ok',
-    data
+    data,
   });
 }
 
 function loadSchema(data, schema): Promise<any> {
-  let validationOptions = {
-    stripUnknown: true
+  const validationOptions = {
+    stripUnknown: true,
   };
 
   return new Promise((resolve, reject) => {
     Joi.validate(data, schema, validationOptions, (err, val) => {
-      if (!err) return resolve(val);
+      if (!err) { return resolve(val); }
 
       let error = null;
 
@@ -79,7 +79,7 @@ function loadSchema(data, schema): Promise<any> {
         return reject(err);
       }
 
-      let validationMessage = err.details[0].message;
+      const validationMessage = err.details[0].message;
 
       error = new Error('Validation Error');
       error.isValidationError = true;
@@ -91,26 +91,26 @@ function loadSchema(data, schema): Promise<any> {
 }
 
 function sendActivationEmail(email, token) {
-  let data = {
+  const data = {
     token,
-    siteRootUrl: config.rootUrl
+    siteRootUrl: config.rootUrl,
   };
 
   return emailHelper.sendEmailTemplate('activation', data, {
     to: email,
-    from: config.email.fromNoReply
+    from: config.email.fromNoReply,
   });
 }
 
 function sendResetPasswordEmail(email, token) {
-  let data = {
+  const data = {
     token,
-    siteRootUrl: config.rootUrl
+    siteRootUrl: config.rootUrl,
   };
 
   return emailHelper.sendEmailTemplate('password_reset', data, {
     to: email,
-    from: config.email.fromNoReply
+    from: config.email.fromNoReply,
   });
 }
 

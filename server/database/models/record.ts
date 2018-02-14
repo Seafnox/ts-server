@@ -1,28 +1,28 @@
 import * as mongoose from 'mongoose';
 
-let ObjectId = mongoose.Schema.ObjectId;
+const ObjectId = mongoose.Schema.ObjectId;
 
-let schema = new mongoose.Schema({
+const schema = new mongoose.Schema({
   date: {
     type: Date,
-    required: true
+    required: true,
   },
   cost: {
     type: Number,
-    required: true
+    required: true,
   },
   note: {
     type: String,
-    required: true
+    required: true,
   },
   categoryId: {
     type: ObjectId,
-    required: true
+    required: true,
   },
   userId: {
     type: ObjectId,
-    required: true
-  }
+    required: true,
+  },
 });
 
 module.exports = mongoose.model('Record', schema);

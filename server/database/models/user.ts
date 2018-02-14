@@ -1,55 +1,55 @@
 import * as mongoose from 'mongoose';
 import * as bcrypt from 'bcrypt-nodejs';
 
-let schema = new mongoose.Schema({
+const schema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
-    index: {unique: true}
+    index: {unique: true},
   },
   profile: {
     local: {
       firstName: {
         type: String,
-        required: true
+        required: true,
       },
       lastName: {
         type: String,
-        required: true
+        required: true,
       },
       password: {
         type: String,
-        required: true
+        required: true,
       },
       isActivated: {
         type: Boolean,
         required: true,
-        default: false
+        default: false,
       },
       activation: {
         token: {
-          type: String
+          type: String,
         },
         created: {
-          type: Date
-        }
+          type: Date,
+        },
       },
       reset: {
         token: {
-          type: String
+          type: String,
         },
         created: {
-          type: Date
-        }
-      }
+          type: Date,
+        },
+      },
     },
     google: {},
-    facebook: {}
-  }
+    facebook: {},
+  },
 });
 
 // generating a hash
-schema.methods.generateHash = password => {
+schema.methods.generateHash = (password) => {
   return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 };
 

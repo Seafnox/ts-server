@@ -7,6 +7,10 @@
     "rootDir": "server",
     "allowUnreachableCode": true,
     "noUnusedLocals":true,
+    "lib": [
+      "es2016",
+      "es2017"
+    ]
   },
   "exclude": ["node_modules", "build"]
 }

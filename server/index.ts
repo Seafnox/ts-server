@@ -1,6 +1,6 @@
-process.on('uncaughtException', err => {
-  let stack = err.stack;
-  console.log(`Uncaught exception. ${err}`);
+process.on('uncaughtException', (err) => {
+  const stack = err.stack;
+  console.error(`Uncaught exception. ${err}`);
 });
 
 import server from './server';
@@ -13,21 +13,21 @@ async function start() {
     await tasks.seed();
   }
 
-  let port = await server.start(process.env.PORT || config.port);
+  const port = await server.start(process.env.PORT || config.port);
 
-  console.log(`Server is listening on port ${port}!`);
+  console.info(`Server is listening on port ${port}!`);
 
   logger.info(`Server started.`);
 }
 
-let run = async () => {
-  let args = process.argv;
+const run = async () => {
+  const args = process.argv;
 
-  //run task
+  // run task
   if (args[2] === 'run') {
     await tasks.run(args[3]);
     process.exit(0);
-    //run server
+    // run server
   } else {
     await start();
   }

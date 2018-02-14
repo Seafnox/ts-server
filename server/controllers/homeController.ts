@@ -2,7 +2,7 @@ import helper from './_controllerHelper';
 import pathHelper from '../helpers/pathHelper';
 
 export default {
-  home
+  home,
 };
 
 async function home(req, res) {

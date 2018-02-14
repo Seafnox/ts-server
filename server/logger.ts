@@ -8,32 +8,32 @@ let generalLogger = null;
 
 export default {
   error: logError,
-  info
+  info,
 };
 
 async function initLoggers() {
-  let logPath = pathHelper.getLocalRelative('./logs');
+  const logPath = pathHelper.getLocalRelative('./logs');
 
   await fs.ensureDirSync(logPath);
 
-  let errorLogPath = pathHelper.getLocalRelative('./logs/errors.log');
-  let infoLogPath = pathHelper.getLocalRelative('./logs/info.log');
+  const errorLogPath = pathHelper.getLocalRelative('./logs/errors.log');
+  const infoLogPath = pathHelper.getLocalRelative('./logs/info.log');
 
   errorLogger = new winston.Logger({
-    transports: [new winston.transports.File({filename: errorLogPath})]
+    transports: [new winston.transports.File({filename: errorLogPath})],
   });
 
   winston.handleExceptions(new winston.transports.File({filename: errorLogPath}));
 
   generalLogger = new winston.Logger({
-    transports: [new winston.transports.File({filename: infoLogPath})]
+    transports: [new winston.transports.File({filename: infoLogPath})],
   });
 }
 
 initLoggers();
 
 function logError(err) {
-  console.log(err);
+  console.error(err);
 
   if (_.isError(err)) {
     return errorLogger.error('Error', {errorMessage: err.message, stack: err.stack});

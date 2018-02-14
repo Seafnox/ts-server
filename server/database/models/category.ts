@@ -1,20 +1,20 @@
 import * as mongoose from 'mongoose';
 
-let ObjectId = mongoose.Schema.ObjectId;
+const ObjectId = mongoose.Schema.ObjectId;
 
-let schema = new mongoose.Schema({
+const schema = new mongoose.Schema({
   title: {
     type: String,
-    required: true
+    required: true,
   },
   description: {
     type: String,
-    required: true
+    required: true,
   },
   userId: {
     type: ObjectId,
-    required: true
-  }
+    required: true,
+  },
 });
 
 module.exports = mongoose.model('Category', schema);

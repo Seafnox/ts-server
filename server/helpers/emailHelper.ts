@@ -9,10 +9,10 @@ import templateRenderer from './templateRenderHelper';
 
 export default {
   sendEmail,
-  sendEmailTemplate
+  sendEmailTemplate,
 };
 
-interface EmailOptions {
+interface IEmailData {
   from: string;
   to: string;
   subject?: string;
@@ -24,32 +24,32 @@ function getEmailTransport() {
     service: 'gmail',
     auth: {
       user: config.email.auth.user,
-      pass: config.email.auth.password
+      pass: config.email.auth.password,
     },
     tls: {
-      rejectUnauthorized: false
-    }
+      rejectUnauthorized: false,
+    },
   };
 
-  //use SendGrid if available
+  // use SendGrid if available
   if (config.email.sendGridKey) {
     transportOptions = sgTransport({
       auth: {
-        api_key: config.email.sendGridKey
-      }
+        api_key: config.email.sendGridKey,
+      },
     });
   }
 
   return nodemailer.createTransport(transportOptions);
 }
 
-async function sendEmailTemplate(templateName: string, emailData: any, emailOptions: EmailOptions) {
+async function sendEmailTemplate(templateName: string, emailData: any, emailOptions: IEmailData) {
   try {
-    let response = await renderTemplate(templateName, emailData);
+    const response = await renderTemplate(templateName, emailData);
 
     emailOptions.html = response.body;
 
-    if (!emailOptions.subject) emailOptions.subject = response.subject;
+    if (!emailOptions.subject) { emailOptions.subject = response.subject; }
 
     if (config.email.useStubs && config.isDevLocal) {
       await sendStubEmail(emailOptions);
@@ -57,25 +57,25 @@ async function sendEmailTemplate(templateName: string, emailData: any, emailOpti
       await sendEmail(emailOptions);
     }
   } catch (err) {
-    console.log('Cannot render email template');
+    console.error('Cannot render email template');
   }
 }
 
 async function renderTemplate(name: string, data: any): Promise<any> {
-  let result = {
+  const result = {
     body: null,
-    subject: null
+    subject: null,
   };
 
-  let bodyFileName = pathHelper.getDataRelative('emails', name, 'body.hbs');
-  let bodyExists = await fs.pathExists(bodyFileName);
+  const bodyFileName = pathHelper.getDataRelative('emails', name, 'body.hbs');
+  const bodyExists = await fs.pathExists(bodyFileName);
 
-  if (!bodyExists) throw new Error(`Cannot find email template file at ${bodyFileName}`);
+  if (!bodyExists) { throw new Error(`Cannot find email template file at ${bodyFileName}`); }
 
   result.body = await templateRenderer.renderTemplate(bodyFileName, data);
 
-  let subjectFileName = pathHelper.getDataRelative('emails', name, 'subject.hbs');
-  let subjectExists = await fs.pathExists(bodyFileName);
+  const subjectFileName = pathHelper.getDataRelative('emails', name, 'subject.hbs');
+  const subjectExists = await fs.pathExists(bodyFileName);
 
   if (subjectExists) {
     result.subject = await templateRenderer.renderTemplate(subjectFileName, data);
@@ -84,12 +84,12 @@ async function renderTemplate(name: string, data: any): Promise<any> {
   return result;
 }
 
-function sendEmail(emailData: EmailOptions): Promise<any> {
-  let emailTransport = getEmailTransport();
+function sendEmail(emailData: IEmailData): Promise<any> {
+  const emailTransport = getEmailTransport();
 
   return new Promise<any>((resolve, reject) => {
     emailTransport.sendMail(emailData, (error, info) => {
-      if (error) return reject(error);
+      if (error) { return reject(error); }
 
       return resolve(info);
     });
@@ -98,19 +98,19 @@ function sendEmail(emailData: EmailOptions): Promise<any> {
 
 async function sendStubEmail(mailOptions) {
   try {
-    let {from, to, subject, html} = mailOptions;
+    const {from, to, subject, html} = mailOptions;
 
-    let nowDateStr = dateFns.format(new Date(), 'YYYY-MM-DD_HH-mm-ss-x');
-    let fileName = `${nowDateStr}_${to}_${subject}.html`;
+    const nowDateStr = dateFns.format(new Date(), 'YYYY-MM-DD_HH-mm-ss-x');
+    const fileName = `${nowDateStr}_${to}_${subject}.html`;
 
-    let emailStubsFolder = pathHelper.getLocalRelative('./emails');
+    const emailStubsFolder = pathHelper.getLocalRelative('./emails');
 
     fs.ensureDirSync(emailStubsFolder);
 
-    let filePath = pathHelper.getLocalRelative('./emails', fileName);
+    const filePath = pathHelper.getLocalRelative('./emails', fileName);
 
     fs.writeFileSync(filePath, html);
   } catch (err) {
-    console.log('Cannot send stub email.');
+    console.error('Cannot send stub email.');
   }
 }

@@ -13,7 +13,7 @@ import pathHelper from './helpers/pathHelper';
 const app = express();
 
 export default {
-  start
+  start,
 };
 
 function start(port) {
@@ -37,7 +37,7 @@ function start(port) {
 }
 
 function initExpress() {
-  if (config.isDevLocal) app.use(morgan('dev')); //log requests
+  if (config.isDevLocal) { app.use(morgan('dev')); } // log requests
 
   app.use(bodyParser.json()); // get information from html forms
   app.use(bodyParser.urlencoded({extended: true}));
@@ -55,11 +55,11 @@ function initSession() {
 }
 
 function initErrorHandling() {
-  //log unhandled errors
+  // log unhandled errors
   app.use((err, req, res, next) => {
     logger.error(err);
 
-    console.log(err);
+    console.error(err);
 
     let message = _.isError(err) ? err.message : err;
     message = config.isDevLocal ? message : 'Server Error';

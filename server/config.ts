@@ -8,7 +8,7 @@ const config = {
   rootUrl: 'http://localhost:3000',
   auth: {
     jwtKey: '',
-    expiry: 60 * 60 * 2
+    expiry: 60 * 60 * 2,
   },
   db: {
     host: 'localhost',
@@ -17,24 +17,24 @@ const config = {
     username: '',
     password: '',
     timeout: 5000,
-    seedOnStart: false
+    seedOnStart: false,
   },
   email: {
     useStubs: false,
     sendGridKey: '',
     auth: {
       user: '',
-      password: ''
+      password: '',
     },
-    fromNoReply: 'noreply@buildapp.com'
-  }
+    fromNoReply: 'noreply@buildapp.com',
+  },
 };
 
-//define ENV VARs which override all other values if defined
+// define ENV VARs which override all other values if defined
 const envVars = {
   rootUrl: 'ROOT_URL',
   auth: {
-    jwtKey: 'JWT_KEY'
+    jwtKey: 'JWT_KEY',
   },
   db: {
     host: 'DB_HOST',
@@ -42,11 +42,11 @@ const envVars = {
     name: 'DB_NAME',
     username: 'DB_USER',
     password: 'DB_PASSWORD',
-    seedOnStart: 'DB_SEED_ON_START'
+    seedOnStart: 'DB_SEED_ON_START',
   },
   email: {
-    sendGridKey: 'SENDGRID_KEY'
-  }
+    sendGridKey: 'SENDGRID_KEY',
+  },
 };
 
 configBuilder.addJsonFile(config, pathHelper.getDataRelative('config.json'), true);
