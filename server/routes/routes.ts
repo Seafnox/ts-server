@@ -2,6 +2,7 @@ import homeController from '../controllers/homeController';
 import apiController from '../controllers/apiController';
 import authController from '../controllers/authController';
 import helper from './routeHelper';
+// import * as multer from 'multer';
 
 export default {
   init: initRoutes,

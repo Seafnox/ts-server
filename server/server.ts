@@ -16,7 +16,7 @@ export default {
   start,
 };
 
-function start(port) {
+function start(port: string): Promise<string> {
   initExpress();
 
   routes.init(app);

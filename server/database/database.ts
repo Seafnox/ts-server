@@ -1,9 +1,8 @@
-import * as mongoose from 'mongoose';
+import mongoose from 'mongoose';
 import * as _ from 'lodash';
 import config from '../config';
 import logger from '../logger';
 
-const db = null;
 const models = {
   User: null,
   Record: null,
@@ -30,11 +29,8 @@ async function init() {
   }
 
   // init models
-  for (const modelName of Object.keys(models)) {
-    const model = require(`./models/${_.lowerCase(modelName)}`);
-
-    models[modelName] = model;
-  }
+  Object.keys(models).forEach((modelName) =>
+    models[modelName] = require(`./models/${_.lowerCase(modelName)}`));
 }
 
 function getConnectionString() {

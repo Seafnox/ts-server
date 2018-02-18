@@ -1,14 +1,11 @@
-process.on('uncaughtException', (err) => {
-  const stack = err.stack;
-  console.error(`Uncaught exception. ${err}`);
-});
+process.on('uncaughtException', (err) => console.error(`Uncaught exception. ${err.toString()} ${err.stack}`));
 
 import server from './server';
 import config from './config';
 import logger from './logger';
 import tasks from './tasks';
 
-async function start() {
+async function start(): Promise<void> {
   if (config.db.seedOnStart) {
     await tasks.seed();
   }
@@ -20,7 +17,7 @@ async function start() {
   logger.info(`Server started.`);
 }
 
-const run = async () => {
+async function run(): Promise<void> {
   const args = process.argv;
 
   // run task
@@ -31,6 +28,6 @@ const run = async () => {
   } else {
     await start();
   }
-};
+}
 
 run();

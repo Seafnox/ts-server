@@ -2,7 +2,7 @@ import pathHelper from './helpers/pathHelper';
 import configBuilder from './helpers/configHelper';
 
 const config = {
-  port: 3000,
+  port: '3000',
   isDevLocal: process.env.NODE_ENV !== 'production',
   appVersion: '0.0.1',
   rootUrl: 'http://localhost:3000',
