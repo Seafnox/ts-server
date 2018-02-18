@@ -1,19 +1,15 @@
 import * as mongoose from 'mongoose';
 
 const schema = new mongoose.Schema({
-  name: {
+  url: {
     type: String,
     required: true,
     unique: true,
   },
-  title: {
-    type: String,
-    required: true,
-  },
-  description: {
-    type: String,
+  thumbs: {
+    type: Array,
     required: true,
   },
 });
 
-export default mongoose.model('Category', schema);
+export default mongoose.model('ProductImage', schema);

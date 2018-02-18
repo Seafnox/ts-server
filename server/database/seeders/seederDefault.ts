@@ -1,4 +1,3 @@
-import * as dateFns from 'date-fns';
 import * as bcrypt from 'bcrypt-nodejs';
 import * as fs from 'fs-extra';
 
@@ -13,8 +12,7 @@ async function seedData(db) {
   const _seedData = await fs.readJson(seedPath);
 
   const userLookup = await seedUsers(db, _seedData.users);
-  const categoryLookup = await seedCategories(db, _seedData.categories, userLookup);
-  await seedRecords(db, _seedData.records, userLookup, categoryLookup);
+  await seedCategories(db, _seedData.categories, userLookup);
 }
 
 async function seedUsers(db, usersData) {
@@ -53,18 +51,4 @@ async function seedCategories(db, categoryData, userLookup) {
   }
 
   return categoryLookup;
-}
-
-async function seedRecords(db, recordsData, userLookup, categoryLookup) {
-  const Record = db.models.Record;
-
-  await Record.remove();
-
-  for (const record of recordsData) {
-    record.date = dateFns.parse(record.date);
-    record.userId = userLookup[record.userId];
-    record.categoryId = categoryLookup[record.categoryId];
-
-    await Record.create(record);
-  }
 }

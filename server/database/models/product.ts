@@ -10,10 +10,18 @@ const schema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  categories: {
+    type: Array,
+    required: true,
+  },
   description: {
     type: String,
     required: true,
   },
+  images: {
+    type: Array,
+    required: true,
+  },
 });
 
-export default mongoose.model('Category', schema);
+export default mongoose.model('Product', schema);
