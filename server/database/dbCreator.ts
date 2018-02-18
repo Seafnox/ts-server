@@ -1,4 +1,4 @@
-import db from './database';
+import db from './dbConnector';
 import seeder from './seeders/seederDefault';
 
 export default {

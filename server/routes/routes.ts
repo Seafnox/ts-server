@@ -25,10 +25,6 @@ function initApiRoutes(localHelper) {
   localHelper.get('/api/categories', apiController.categoryList);
   localHelper.post('/api/category', apiController.saveCategory);
   localHelper.delete('/api/category/:id', apiController.deleteCategory);
-
-  localHelper.get('/api/records', apiController.recordList);
-  localHelper.post('/api/record', apiController.saveRecord);
-  localHelper.delete('/api/record/:id', apiController.deleteRecord);
 }
 
 function initAuthRoutes(localHelper) {

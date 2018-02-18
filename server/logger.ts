@@ -1,5 +1,5 @@
 import * as winston from 'winston';
-import * as _ from 'lodash';
+import { isError } from 'lodash';
 import * as fs from 'fs-extra';
 import pathHelper from './helpers/pathHelper';
 
@@ -11,10 +11,10 @@ export default {
   info,
 };
 
-async function initLoggers() {
+function initLoggers() {
   const logPath = pathHelper.getLocalRelative('./logs');
 
-  await fs.ensureDirSync(logPath);
+  fs.ensureDirSync(logPath);
 
   const errorLogPath = pathHelper.getLocalRelative('./logs/errors.log');
   const infoLogPath = pathHelper.getLocalRelative('./logs/info.log');
@@ -35,7 +35,7 @@ initLoggers();
 function logError(err) {
   console.error(err);
 
-  if (_.isError(err)) {
+  if (isError(err)) {
     return errorLogger.error('Error', {errorMessage: err.message, stack: err.stack});
   } else {
     errorLogger.error(err);

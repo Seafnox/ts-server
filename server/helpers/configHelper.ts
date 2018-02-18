@@ -1,5 +1,5 @@
-import * as fs from 'fs-extra';
-import * as _ from 'lodash';
+import { readFileSync } from 'fs-extra';
+import { forOwn, isString, isObject, clone, merge, set } from 'lodash';
 import * as stripJsonComments from 'strip-json-comments';
 
 export default {
@@ -10,11 +10,11 @@ export default {
 
 function addJsonFile(config, path, required = false) {
   try {
-    const fileVal = fs.readFileSync(path, {encoding: 'utf8'});
+    const fileVal = readFileSync(path, {encoding: 'utf8'});
 
     const fileJson = JSON.parse(stripJsonComments(fileVal));
 
-    _.merge(config, fileJson);
+    merge(config, fileJson);
   } catch (err) {
     if (required) {
       throw new Error(`Cannot read config file from ${path}`);
@@ -27,14 +27,14 @@ function loadEnvVars(config, envVars) {
 }
 
 function loadEnvVarsValues(config, envVars, path) {
-  _.forOwn(envVars, (value, key) => {
-    if (_.isString(value)) {
-      const newPath = _.clone(path);
+  forOwn(envVars, (value, key) => {
+    if (isString(value)) {
+      const newPath = clone(path);
       newPath.push(key);
 
       loadEnvVarValue(config, newPath, value);
-    } else if (_.isObject(value)) {
-      const newPath = _.clone(path);
+    } else if (isObject(value)) {
+      const newPath = clone(path);
       newPath.push(key);
 
       loadEnvVarsValues(config, value, newPath);
@@ -46,7 +46,7 @@ function loadEnvVarsValues(config, envVars, path) {
 
 function loadEnvVarValue(config, path, envVar) {
   if (process.env[envVar]) {
-    _.set(config, path, process.env[envVar]);
+    set(config, path, process.env[envVar]);
   }
 }
 

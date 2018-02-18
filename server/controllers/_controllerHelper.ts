@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import { get } from 'lodash';
 import * as Joi from 'joi';
 
 import config from '../config';
@@ -26,7 +26,7 @@ function sendFailureMessage(error, res) {
     status = 'validation error';
   }
 
-  const mongooseError = _.get(error, 'response.data.error');
+  const mongooseError = get(error, 'response.data.error');
   if (mongooseError) {
     statusCode = 400;
     message = `Schema validation error: ${mongooseError}`;

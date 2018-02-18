@@ -1,11 +1,12 @@
 import mongoose from 'mongoose';
-import * as _ from 'lodash';
+import { lowerCase } from 'lodash';
 import config from '../config';
 import logger from '../logger';
 
 const models = {
   User: null,
-  Record: null,
+  Product: null,
+  ProductImage: null,
   Category: null,
 };
 
@@ -30,7 +31,7 @@ async function init() {
 
   // init models
   Object.keys(models).forEach((modelName) =>
-    models[modelName] = require(`./models/${_.lowerCase(modelName)}`));
+    models[modelName] = require(`./models/${lowerCase(modelName)}`));
 }
 
 function getConnectionString() {

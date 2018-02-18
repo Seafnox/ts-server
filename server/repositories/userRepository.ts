@@ -1,7 +1,7 @@
-import * as _ from 'lodash';
-import * as crypto from 'crypto';
+import { find } from 'lodash';
+import { randomBytes } from 'crypto';
 
-import db from '../database/database';
+import db from '../database/dbConnector';
 import AppError from '../appError';
 
 export default {
@@ -85,7 +85,7 @@ async function getUsers() {
 async function getUserByActivationToken(token: string) {
   const users = await getUsers();
 
-  const findUser = _.find(users, (user: any) => {
+  const findUser = find(users, (user: any) => {
     return user.profile.local && user.profile.local.activation.token === token;
   });
 
@@ -160,7 +160,7 @@ async function updateUserPassword(userId: number, password: string) {
 async function getUserByResetToken(token: string) {
   const users = await getUsers();
 
-  const findUser = _.find(users, (user: any) => {
+  const findUser = find(users, (user: any) => {
     return user.profile.local && user.profile.local.reset.token === token;
   });
 
@@ -181,6 +181,6 @@ async function refreshResetToken(userId: number) {
 }
 
 function generateActivationToken(): string {
-  const token = crypto.randomBytes(32).toString('hex');
+  const token = randomBytes(32).toString('hex');
   return token;
 }

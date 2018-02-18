@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import { isString } from 'lodash';
 
 interface IAppError {
   code: string;
@@ -21,7 +21,7 @@ export class AppError implements IAppError {
   constructor(errorData: IAppErrorData | string) {
     Error.captureStackTrace(this, this.constructor);
 
-    if (_.isString(errorData)) {
+    if (isString(errorData)) {
       this.message = errorData as string;
     } else {
       const appErrorData = errorData as IAppErrorData;

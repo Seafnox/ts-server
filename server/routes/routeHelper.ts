@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import { startsWith } from 'lodash';
 import * as jwt from 'jsonwebtoken';
 
 let app = null;
@@ -92,7 +92,7 @@ function getAuthenticatedCheckHandler() {
 
     const prefix = 'Bearer ';
 
-    if (!_.startsWith(header, prefix)) { return null; }
+    if (!startsWith(header, prefix)) { return null; }
 
     return header.substring(prefix.length);
   }

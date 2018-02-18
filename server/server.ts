@@ -2,8 +2,8 @@ import * as express from 'express';
 import * as morgan from 'morgan';
 import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
-import * as _ from 'lodash';
-import db from './database/database';
+import { isError } from 'lodash';
+import db from './database/dbConnector';
 
 import config from './config';
 import routes from './routes/routes';
@@ -61,7 +61,7 @@ function initErrorHandling() {
 
     console.error(err);
 
-    let message = _.isError(err) ? err.message : err;
+    let message = isError(err) ? err.message : err;
     message = config.isDevLocal ? message : 'Server Error';
 
     res.status(500).send({error: message});
