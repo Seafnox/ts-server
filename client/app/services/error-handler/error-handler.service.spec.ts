@@ -1,9 +1,9 @@
 import { inject, TestBed } from '@angular/core/testing';
-import { jasmineDefaultTimeoutInterval } from '../../config/simple-constants.data';
+import { jasmineDefaultTimeoutInterval } from '../../data/simple-constants.data';
 
-import { DataStorageService } from './data-storage.service';
+import { ErrorHandlerService } from './error-handler.service';
 
-describe('DataStorageService', () => {
+describe('ErrorHandlerService', () => {
     let originalTimeout;
 
     beforeEach(() => {
@@ -18,12 +18,12 @@ describe('DataStorageService', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [
-                DataStorageService,
+                ErrorHandlerService,
             ],
         });
     });
 
-    it('should be created', inject([DataStorageService], (service: DataStorageService) => {
+    it('should be created', inject([ErrorHandlerService], (service: ErrorHandlerService) => {
         expect(service).toBeTruthy();
     }));
 });

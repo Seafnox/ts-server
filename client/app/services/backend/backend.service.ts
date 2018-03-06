@@ -6,7 +6,7 @@ import 'rxjs/add/operator/retryWhen';
 import 'rxjs/add/operator/switchMap';
 import { Observable } from 'rxjs/Observable';
 import { ContentTypes } from '../../config/content-type.constants';
-import { DataStorageService } from '../data-storage/data-storage.service';
+import { DataStorageService } from '../../servises/data-storage/data-storage.service';
 import { ErrorHandlerService } from '../error-handler/error-handler.service';
 import { NOTIFICATION_TYPES } from '../notification/notification.config';
 import { NotificationService } from '../notification/notification.service';

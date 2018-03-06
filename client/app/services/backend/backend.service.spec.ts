@@ -1,15 +1,13 @@
 import { HttpClientModule } from '@angular/common/http';
 import { inject, TestBed } from '@angular/core/testing';
-import { jasmineDefaultTimeoutInterval } from '../../config/simple-constants.data';
-import { BackendService } from '../backend/backend.service';
-import { DataStorageService } from '../data-storage/data-storage.service';
+import { jasmineDefaultTimeoutInterval } from '../../data/simple-constants.data';
+import { DataStorageService } from '../../servises/data-storage/data-storage.service';
 import { ErrorHandlerService } from '../error-handler/error-handler.service';
 import { NotificationService } from '../notification/notification.service';
-import { AuthService } from './auth.service';
+import { BackendService } from './backend.service';
 import { instance, mock } from 'ts-mockito';
 
-describe('AuthService', () => {
-    let backendService: BackendService;
+describe('BackendService', () => {
     let errorHandlerService: ErrorHandlerService;
     let dataStorageService: DataStorageService;
     let notificationService: NotificationService;
@@ -25,7 +23,6 @@ describe('AuthService', () => {
     });
 
     beforeEach(() => {
-        backendService = mock<BackendService>(BackendService);
         errorHandlerService = mock<ErrorHandlerService>(ErrorHandlerService);
         dataStorageService = mock<DataStorageService>(DataStorageService);
         notificationService = mock<NotificationService>(NotificationService);
@@ -33,8 +30,7 @@ describe('AuthService', () => {
         TestBed.configureTestingModule({
             imports: [HttpClientModule],
             providers: [
-                AuthService,
-                {provide: BackendService, useFactory: () => instance(backendService)},
+                BackendService,
                 {provide: ErrorHandlerService, useFactory: () => instance(errorHandlerService)},
                 {provide: DataStorageService, useFactory: () => instance(dataStorageService)},
                 {provide: NotificationService, useFactory: () => instance(notificationService)},
@@ -42,7 +38,7 @@ describe('AuthService', () => {
         });
     });
 
-    it('should be created', inject([AuthService], (service: AuthService) => {
+    it('should be created', inject([BackendService], (service: BackendService) => {
         expect(service).toBeTruthy();
     }));
 });
