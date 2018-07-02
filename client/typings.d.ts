@@ -1,7 +1,7 @@
 /* SystemJS module definition */
 // tslint:disable
 
-declare var module: NodeModule;
+declare const module: NodeModule;
 interface NodeModule {
   id: string;
 }

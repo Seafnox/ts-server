@@ -14,7 +14,7 @@ export class ClickOutsideDirective {
 
     @HostListener('document:click', ['$event', '$event.path'])
     public onClick(event: MouseEvent, targetElementPath: any[]): void {
-        const elementRefInPath = targetElementPath.find(element => element === this.elementRef.nativeElement);
+        const elementRefInPath = targetElementPath.find((element) => element === this.elementRef.nativeElement);
         if (!elementRefInPath) {
             this.appClickOutside.emit(event);
         }

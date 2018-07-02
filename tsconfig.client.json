@@ -1,6 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "./build/client"
+    "outDir": "../build/client",
+    "rootDir": "client"
   }
 }

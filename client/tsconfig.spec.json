@@ -1,7 +1,8 @@
 {
   "extends": "../tsconfig.client.json",
   "compilerOptions": {
-    "outDir": "../out-tsc/spec",
+    "outDir": "../build/client",
+    "rootDir": "client",
     "baseUrl": "./",
     "module": "commonjs",
     "types": [

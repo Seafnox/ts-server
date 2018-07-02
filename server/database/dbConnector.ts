@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
-import { lowerCase } from 'lodash';
+import * as mongoose from 'mongoose';
+import { snakeCase } from 'lodash';
 import config from '../config';
 import logger from '../logger';
 
@@ -31,7 +31,7 @@ async function init() {
 
   // init models
   Object.keys(models).forEach((modelName) =>
-    models[modelName] = require(`./models/${lowerCase(modelName)}`));
+    models[modelName] = require(`./models/${snakeCase(modelName)}`));
 }
 
 function getConnectionString() {

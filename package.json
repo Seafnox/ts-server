@@ -5,8 +5,8 @@
   "private": true,
   "author": "Kirill Warp",
   "scripts": {
-    "tslint:server": "tslint -c tslint.json -p 'tsconfig.server.json' 'server/**/*.ts'",
-    "tslint:client": "tslint -c tslint.json -p 'tsconfig.client.json' 'client/**/*.ts'",
+    "tslint:server": "tslint -c tslint.json -p tsconfig.server.json 'server/**/*.ts'",
+    "tslint:client": "tslint -c tslint.json -p tsconfig.client.json 'client/**/*.ts'",
     "lint": "npm run tslint:client && npm run tslint:server",
     "ng": "ng",
     "start:client": "ng build -w",
@@ -79,6 +79,7 @@
     "@angular/platform-browser": "~5.2.2",
     "@angular/platform-browser-dynamic": "~5.2.2",
     "@angular/router": "~5.2.2",
+    "@types/core-js": "^2.5.0",
     "@types/jasmine": "~2.8.3",
     "@types/jasminewd2": "~2.0.2",
     "codelyzer": "~4.0.1",
