@@ -3,7 +3,7 @@ local/logs
 local/emails
 node_modules
 local/config.local.json
-.idea/
+.idea
 shrinkwrap.yaml
 package-lock.json
-.tcscache/
+.tcscache
