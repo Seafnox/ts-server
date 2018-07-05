@@ -6,15 +6,15 @@ import { ComponentsModule } from './components/components.module';
 import { WebStorageModule } from 'ngx-store';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    ComponentsModule,
-  ],
-  imports: [
-    BrowserModule,
-    WebStorageModule,
-  ],
-  providers: [],
-  bootstrap: [AppComponent],
+    imports: [
+        BrowserModule,
+        WebStorageModule,
+        ComponentsModule,
+    ],
+    declarations: [
+        AppComponent,
+    ],
+    providers: [],
+    bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
