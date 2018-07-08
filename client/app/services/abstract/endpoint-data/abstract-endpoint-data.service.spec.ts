@@ -3,7 +3,7 @@ import { BackendService } from '../../backend/backend.service';
 import { instance, mock } from 'ts-mockito';
 import { Observable } from 'rxjs/Observable';
 import { _throw } from 'rxjs/observable/throw';
-import { AbstractEndpointDataService, ParamConfigInterface } from './abstract-endpoint-data.service';
+import { AbstractEndpointDataService } from './abstract-endpoint-data.service';
 import { Injectable } from '@angular/core';
 
 // remove this class in your test

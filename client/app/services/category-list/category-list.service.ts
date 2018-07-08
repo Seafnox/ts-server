@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AbstractIterableEndpointDataService } from '../abstract/iterable-endpoint-data/abstract-iterable-endpoint-data.service';
 import { BackendService } from '../backend/backend.service';
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
+import { Observable } from 'rxjs';
+import { of } from 'rxjs/internal/observable/of';
 
 interface ICategoryDto {
     id: string;

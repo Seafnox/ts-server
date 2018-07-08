@@ -1,11 +1,9 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/retry';
-import 'rxjs/add/operator/retryWhen';
-import 'rxjs/add/operator/switchMap';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { HttpRequestOptions } from './http-request-options.interface';
+import { catchError, delay, retryWhen, switchMap } from 'rxjs/operators';
+import { throwError } from 'rxjs/internal/observable/throwError';
 
 @Injectable()
 export class BackendService {
@@ -13,31 +11,31 @@ export class BackendService {
         protected http: HttpClient,
     ) {}
 
-    public get<T>(url: string, options?: HttpRequestOptions): Observable<T> {
+    public get$<T>(url: string, options?: HttpRequestOptions): Observable<T> {
         const source = this.http.get<T>(url, options);
 
         return this.requestHandler<T>(source);
     }
 
-    public post<T>(url: string, options?: HttpRequestOptions): Observable<T> {
+    public post$<T>(url: string, options?: HttpRequestOptions): Observable<T> {
         const source = this.http.post<T>(url, options.body, options);
 
         return this.requestHandler<T>(source);
     }
 
-    public patch<T>(url: string, options?: HttpRequestOptions): Observable<T> {
+    public patch$<T>(url: string, options?: HttpRequestOptions): Observable<T> {
         const source = this.http.patch<T>(url, options.body, options);
 
         return this.requestHandler<T>(source);
     }
 
-    public put<T>(url: string, options?: HttpRequestOptions): Observable<T> {
+    public put$<T>(url: string, options?: HttpRequestOptions): Observable<T> {
         const source = this.http.put<T>(url, options.body, options);
 
         return this.requestHandler<T>(source);
     }
 
-    public delete<T>(url: string, options?: HttpRequestOptions): Observable<T> {
+    public delete$<T>(url: string, options?: HttpRequestOptions): Observable<T> {
         const source = this.http.delete<T>(url, options);
 
         return this.requestHandler<T>(source);
@@ -45,8 +43,13 @@ export class BackendService {
 
     protected requestHandler<T>(source: Observable<T>, retryDelay = 1000): Observable<T> {
         return source
-            .retryWhen((errors) => errors.delay(retryDelay).switchMap((_errors) => Observable.throw(_errors)))
-            .catch((err: HttpErrorResponse) => this.handleError<T, typeof err>(err));
+            .pipe(
+                retryWhen((errors) => errors.pipe(
+                    delay(retryDelay),
+                    switchMap((_errors) => throwError(_errors))),
+                ),
+                catchError((err: HttpErrorResponse) => this.handleError<T, typeof err>(err)),
+            );
     }
 
     protected handleError<T, K extends HttpErrorResponse>(errorResponse: K): Observable<T> {
@@ -66,7 +69,7 @@ export class BackendService {
 
         console.error(`${status}: ${statusText}| Error: ${errMsg}`);
 
-        return Observable.throw(errMsg);
+        return throwError(errMsg);
     }
 
 }

@@ -1,5 +1,5 @@
 import { BackendService } from '../../backend/backend.service';
-import { AbstractEndpointDataService, ParamConfigInterface } from '../endpoint-data/abstract-endpoint-data.service';
+import { AbstractEndpointDataService, IParamConfig } from '../endpoint-data/abstract-endpoint-data.service';
 
 /**
  * Абстрактный класс, который описывает сервис, получающий данные с бэка в виде массива сущностей определённого типа
@@ -12,7 +12,7 @@ export abstract class AbstractIterableEndpointDataService<T, K> extends Abstract
     protected constructor(
         backendService: BackendService,
         endpoint: string,
-        paramConfig?: ParamConfigInterface,
+        paramConfig?: IParamConfig,
     ) {
         super(backendService, endpoint, paramConfig);
     }

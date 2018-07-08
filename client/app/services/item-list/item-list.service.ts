@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AbstractIterableEndpointDataService } from '../abstract/iterable-endpoint-data/abstract-iterable-endpoint-data.service';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { BackendService } from '../backend/backend.service';
 
 interface IItemDto {

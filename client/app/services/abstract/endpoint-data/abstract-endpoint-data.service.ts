@@ -1,14 +1,13 @@
-import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { catchError, filter, finalize, map, tap } from 'rxjs/operators';
 import { BackendService } from '../../backend/backend.service';
 
-export interface ParamConfigInterface {
+export interface IParamConfig {
     [keys: string]: string;
 }
 
-export interface QueryParams {
-    params: ParamConfigInterface;
+export interface IQueryParamDict {
+    params: IParamConfig;
 }
 
 /**
@@ -44,7 +43,7 @@ export abstract class AbstractEndpointDataService<T, K> {
     protected constructor(
         public backendService: BackendService,
         private endpoint: string,
-        private paramConfig?: ParamConfigInterface,
+        private paramConfig?: IParamConfig,
     ) {}
 
     /**
@@ -103,7 +102,7 @@ export abstract class AbstractEndpointDataService<T, K> {
     /**
      * Метод обработки ошибок сервера
      * @param {Error} error пришедшая ошибка
-     * @param {Observable<T>} repeatableObserver поток, который необходимо вернуть, если нужно перезапустить запрос
+     * @param {Observable<T>} repeatableObserver$ поток, который необходимо вернуть, если нужно перезапустить запрос
      * @returns {Observable<T>} поток перезапуска или новый поток _throw
      */
     protected abstract onCatchError$(error: Error, repeatableObserver$: Observable<T>): Observable<T>;
@@ -112,12 +111,14 @@ export abstract class AbstractEndpointDataService<T, K> {
      * Метод обрабатывает объект пар ключ-значение, поданый в конструктор, в параметры запроса к серверу
      * данные будут использоваться в каждом запросе к серверу.
      * Если параметры не заданы то функция вернёт undefined
-     * @param {ParamConfigInterface} paramConfig
-     * @returns {QueryParams}
+     * @param {IParamConfig} paramConfig
+     * @returns {IQueryParamDict}
      */
-    protected getQueryParams(paramConfig: ParamConfigInterface): QueryParams {
+    protected getQueryParams(paramConfig: IParamConfig): IQueryParamDict {
         if (!paramConfig) {
-            return;
+            return {
+                params: {},
+            };
         }
 
         return {
