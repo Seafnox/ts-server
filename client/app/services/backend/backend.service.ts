@@ -5,14 +5,12 @@ import 'rxjs/add/operator/retry';
 import 'rxjs/add/operator/retryWhen';
 import 'rxjs/add/operator/switchMap';
 import { Observable } from 'rxjs/Observable';
-import { ErrorHandlerService } from '../error-handler/error-handler.service';
 import { HttpRequestOptions } from './http-request-options.interface';
 
 @Injectable()
 export class BackendService {
     constructor(
         protected http: HttpClient,
-        protected errorHandler: ErrorHandlerService,
     ) {}
 
     public get<T>(url: string, options?: HttpRequestOptions): Observable<T> {
@@ -45,16 +43,30 @@ export class BackendService {
         return this.requestHandler<T>(source);
     }
 
-    public parseMessageErrors(errorString = ''): string[] {
-        return errorString.split(/\n/);
-    }
-
-    private requestHandler<T>(source: Observable<T>, retryDelay = 1000): Observable<T> {
+    protected requestHandler<T>(source: Observable<T>, retryDelay = 1000): Observable<T> {
         return source
             .retryWhen((errors) => errors.delay(retryDelay).switchMap((_errors) => Observable.throw(_errors)))
-            .catch((err: HttpErrorResponse) => {
-                console.error(err);
-                return this.errorHandler.handleError<T, typeof err>(err);
-            });
+            .catch((err: HttpErrorResponse) => this.handleError<T, typeof err>(err));
     }
+
+    protected handleError<T, K extends HttpErrorResponse>(errorResponse: K): Observable<T> {
+        const {status, statusText, error} = errorResponse;
+        let errMsg: string;
+
+        if (errorResponse instanceof HttpErrorResponse) {
+            if (!error || !error.description) {
+                errMsg = 'Unknown error!';
+            } else {
+                errMsg = error.description;
+            }
+        } else {
+            // Ожидаем HttpErrorResponse, но прийти может всё что угодно. Это typescript, детка
+            errMsg = error.description ? error.description : error.toString();
+        }
+
+        console.error(`${status}: ${statusText}| Error: ${errMsg}`);
+
+        return Observable.throw(errMsg);
+    }
+
 }

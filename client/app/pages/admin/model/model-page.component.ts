@@ -6,10 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./model-page.component.css']
 })
 export class ModelPage implements OnInit {
-
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+    ngOnInit(): void {
+        console.log(this.constructor.name);
+    }
 }

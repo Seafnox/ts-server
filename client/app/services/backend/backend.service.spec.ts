@@ -1,16 +1,9 @@
 import { HttpClientModule } from '@angular/common/http';
 import { inject, TestBed } from '@angular/core/testing';
 import { jasmineDefaultTimeoutInterval } from '../../data/simple-constants.data';
-import { DataStorageService } from '../../servises/data-storage/data-storage.service';
-import { ErrorHandlerService } from '../error-handler/error-handler.service';
-import { NotificationService } from '../notification/notification.service';
 import { BackendService } from './backend.service';
-import { instance, mock } from 'ts-mockito';
 
 describe('BackendService', () => {
-    let errorHandlerService: ErrorHandlerService;
-    let dataStorageService: DataStorageService;
-    let notificationService: NotificationService;
     let originalTimeout;
 
     beforeEach(() => {
@@ -23,17 +16,11 @@ describe('BackendService', () => {
     });
 
     beforeEach(() => {
-        errorHandlerService = mock<ErrorHandlerService>(ErrorHandlerService);
-        dataStorageService = mock<DataStorageService>(DataStorageService);
-        notificationService = mock<NotificationService>(NotificationService);
 
         TestBed.configureTestingModule({
             imports: [HttpClientModule],
             providers: [
                 BackendService,
-                {provide: ErrorHandlerService, useFactory: () => instance(errorHandlerService)},
-                {provide: DataStorageService, useFactory: () => instance(dataStorageService)},
-                {provide: NotificationService, useFactory: () => instance(notificationService)},
             ],
         });
     });

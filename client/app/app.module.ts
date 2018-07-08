@@ -5,17 +5,18 @@ import { AppComponent } from './app.component';
 import { ComponentsModule } from './components/components.module';
 import { WebStorageModule } from 'ngx-store';
 import { RouterModule } from '@angular/router';
-import { appRouting } from './app.routing';
+import { appRoutes } from './app.routing';
 import { MainPageModule } from './pages/main/main-page.module';
 import { AdminPageModule } from './pages/admin/admin-page.module';
 import { NotFoundPageModule } from './pages/not-found/not-found-page.module';
+import { BackendService } from './services/backend/backend.service';
 
 @NgModule({
     imports: [
         BrowserModule,
         WebStorageModule,
         ComponentsModule,
-        RouterModule.forRoot(appRouting),
+        RouterModule.forRoot(appRoutes, {enableTracing: true}),
         MainPageModule,
         AdminPageModule,
         NotFoundPageModule,
@@ -23,7 +24,9 @@ import { NotFoundPageModule } from './pages/not-found/not-found-page.module';
     declarations: [
         AppComponent,
     ],
-    providers: [],
+    providers: [
+        {provide: BackendService, useClass: BackendService},
+    ],
     bootstrap: [AppComponent],
 })
 export class AppModule {}

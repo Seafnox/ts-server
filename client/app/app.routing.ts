@@ -1,16 +1,11 @@
-import { Routes } from '@angular/router';
-import { MainPage } from './pages/main/main-page.component';
 import { AdminPage } from './pages/admin/admin-page.component';
 import { NotFoundPage } from './pages/not-found/not-found-page.component';
+import { Routes } from '@angular/router';
 
-export const appRouting: Routes = [
+export const appRoutes: Routes = [
     { 	path: '',
         redirectTo: 'main',
         pathMatch: 'full'
-    },
-    {
-        path: 'main',
-        component: MainPage,
     },
     {
         path: 'admin',

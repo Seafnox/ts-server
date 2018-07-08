@@ -23,7 +23,8 @@ import { LoginBoxComponent } from './login-box/login-box.component';
 import { ButtonComponent } from './button/button.component';
 import { ImageCollectionComponent } from './image-collection/image-collection.component';
 import { ImageViewerComponent } from './image-viewer/image-viewer.component';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { SideCategoriesModule } from './side-categories/side-categories.module';
 
 const EXTENTIONS = [
     FormsModule,
@@ -43,6 +44,7 @@ const EXTENTIONS = [
     MatTooltipModule,
     MatPaginatorModule,
     MatSortModule,
+    SideCategoriesModule,
 ];
 
 const DECLARATIONS = [
