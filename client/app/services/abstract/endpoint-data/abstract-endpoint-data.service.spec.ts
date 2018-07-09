@@ -1,10 +1,10 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { BackendService } from '../../backend/backend.service';
 import { instance, mock } from 'ts-mockito';
-import { Observable } from 'rxjs/Observable';
-import { _throw } from 'rxjs/observable/throw';
+import { Observable } from 'rxjs';
 import { AbstractEndpointDataService } from './abstract-endpoint-data.service';
 import { Injectable } from '@angular/core';
+import { throwError } from 'rxjs/internal/observable/throwError';
 
 // remove this class in your test
 @Injectable()
@@ -20,7 +20,7 @@ class TestEndpointDataService extends AbstractEndpointDataService<string, string
     }
 
     protected onCatchError$(error: Error, repeatableObserver$: Observable<string>): Observable<string> {
-        return _throw(error);
+        return throwError(error);
     }
 }
 
