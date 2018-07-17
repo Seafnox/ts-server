@@ -1,10 +1,11 @@
-import * as winston from 'winston';
+import winston = require('winston');
 import { isError } from 'lodash';
-import * as fs from 'fs-extra';
+import fs = require('fs-extra');
 import pathHelper from './helpers/pathHelper';
+import { LoggerInstance } from 'winston';
 
-let errorLogger = null;
-let generalLogger = null;
+let errorLogger: LoggerInstance = null;
+let generalLogger: LoggerInstance = null;
 
 export default {
   error: logError,
@@ -32,16 +33,16 @@ function initLoggers() {
 
 initLoggers();
 
-function logError(err) {
+function logError(err: Error | any): void {
   console.error(err);
 
   if (isError(err)) {
-    return errorLogger.error('Error', {errorMessage: err.message, stack: err.stack});
+    errorLogger.error('Error', {errorMessage: err.message, stack: err.stack});
   } else {
     errorLogger.error(err);
   }
 }
 
-function info(message, metadata = {}) {
+function info(message: string, metadata = {}): void {
   generalLogger.info(message, metadata);
 }

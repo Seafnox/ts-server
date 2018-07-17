@@ -1,7 +1,7 @@
-import * as bcrypt from 'bcrypt-nodejs';
-import * as Joi from 'joi';
-import * as dateFns from 'date-fns';
-import * as jwt from 'jsonwebtoken';
+import bcrypt = require('bcrypt-nodejs');
+import Joi = require('joi');
+import dateFns = require('date-fns');
+import jwt = require('jsonwebtoken');
 
 import helper from './_controllerHelper';
 import userRepository from '../repositories/userRepository';
@@ -44,8 +44,6 @@ async function signUpPost(req, res) {
     let user = await userRepository.getUserByEmail(userData.email);
 
     user = await userRepository.saveLocalAccount(user, userData);
-
-    await helper.sendActivationEmail(user.email, user.profile.local.activation.token);
 
     const message = 'Activation email was send. Please, check you inbox.';
 
@@ -124,10 +122,6 @@ async function activate(req, res) {
     const isTokenExpired = dateFns.differenceInHours(activationTime, new Date()) > 24;
 
     if (isTokenExpired) {
-      const user = await userRepository.refreshActivationToken(localUser.id);
-
-      await helper.sendActivationEmail(user.email, user.profile.local.activation.token);
-
       data = {
         message: 'Activation token has expired. New activation email was send.',
         status: 'warning',
@@ -161,11 +155,9 @@ async function forgotPassword(req, res) {
 
     const localUser = await userRepository.getLocalUserByEmail(email);
 
-    if (!localUser) { throw new AppError('There is no user with provided email.'); }
-
-    const updatedUser = await userRepository.resetPassword(localUser.id);
-
-    await helper.sendResetPasswordEmail(updatedUser.email, updatedUser.profile.local.reset.token);
+    if (!localUser) {
+        throw new AppError('There is no user with provided email.');
+    }
 
     const message = `We've just dropped you an email. Please check your mail to reset your password. Thanks!`;
 
@@ -217,7 +209,7 @@ async function resetPasswordPost(req, res) {
   }
 }
 
-async function getUserByResetToken(token) {
+async function getUserByResetToken(token: string) {
   if (!token) { throw new AppError('No reset token provided.'); }
 
   const localUser = await userRepository.getUserByResetToken(token);
@@ -229,10 +221,6 @@ async function getUserByResetToken(token) {
   const isTokenExpired = dateFns.differenceInHours(activationTime, new Date()) > 24;
 
   if (isTokenExpired) {
-    const user = await userRepository.refreshResetToken(localUser.id);
-
-    await helper.sendResetPasswordEmail(user.email, user.profile.local.reset.token);
-
     throw new AppError('Reset password token has expired. New activation email was send.');
   }
 

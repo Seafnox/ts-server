@@ -1,13 +1,25 @@
 import * as path from 'path';
 
+enum Profiles {
+    DEV = 'development',
+    PROD = 'production',
+}
+
+interface IProfileData {
+    root: string;
+    data: string;
+    local: string;
+    client: string;
+}
+
 const profileData = {
-  production: {
+  [Profiles.PROD]: {
     root: '../',
     data: './data',
     local: './local',
     client: './client',
   },
-  development: {
+  [Profiles.DEV]: {
     root: '../../..',
     data: './data',
     local: './local',
@@ -25,19 +37,19 @@ export default {
   getClientRelative: getClientRelativePath,
 };
 
-function getDataRelativePath(...paths) {
+function getDataRelativePath(...paths: string[]) {
   return getRelativePath('data', ...paths);
 }
 
-function getLocalRelativePath(...paths) {
+function getLocalRelativePath(...paths: string[]) {
   return getRelativePath('local', ...paths);
 }
 
-function getClientRelativePath(...paths) {
+function getClientRelativePath(...paths: string[]) {
   return getRelativePath('client', ...paths);
 }
 
-function getRelativePath(profileFolder, ...paths: string[]) {
+function getRelativePath(profileFolder: keyof IProfileData, ...paths: string[]) {
   const folderRelative = profileData[getCurrentProfile()][profileFolder];
 
   if (!folderRelative) { throw Error(`Cannot find relative folder profile '${profileFolder}'`); }
@@ -61,8 +73,8 @@ function getRootPath() {
   return path.join(__dirname, rootRelative);
 }
 
-function getCurrentProfile() {
-  const env = process.env['NODE_ENV'];
+function getCurrentProfile(): Profiles {
+  const env = <Profiles>process.env['NODE_ENV'];
 
-  return env ? env : 'development';
+  return env ? env : Profiles.DEV;
 }

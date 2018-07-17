@@ -1,7 +1,7 @@
 import mongoose = require('mongoose');
 import { ModelNames } from '../modelNames.enum';
 
-export interface ICategory extends mongoose.Document {
+export interface IArticle extends mongoose.Document {
     name: string;
     title: string;
     description: string;
@@ -27,4 +27,4 @@ const schema = new mongoose.Schema({
     },
 });
 
-export const CategoryModel = mongoose.model<ICategory>(ModelNames.Category, schema);
+export const ArticleModel = mongoose.model<IArticle>(ModelNames.Article, schema);

@@ -2,15 +2,13 @@ import { get } from 'lodash';
 import * as Joi from 'joi';
 
 import config from '../config';
-import emailHelper from '../helpers/emailHelper';
 import logger from '../logger';
+import { IDictionary } from '../interfaces/dictionary';
 
 export default {
   sendData,
   sendFailureMessage,
   loadSchema,
-  sendActivationEmail,
-  sendResetPasswordEmail,
   getCurrentUser,
 };
 
@@ -63,7 +61,7 @@ function sendData(data, res) {
   });
 }
 
-function loadSchema(data, schema): Promise<any> {
+function loadSchema(data, schema): Promise<IDictionary> {
   const validationOptions = {
     stripUnknown: true,
   };
@@ -87,30 +85,6 @@ function loadSchema(data, schema): Promise<any> {
 
       return reject(error);
     });
-  });
-}
-
-function sendActivationEmail(email, token) {
-  const data = {
-    token,
-    siteRootUrl: config.rootUrl,
-  };
-
-  return emailHelper.sendEmailTemplate('activation', data, {
-    to: email,
-    from: config.email.fromNoReply,
-  });
-}
-
-function sendResetPasswordEmail(email, token) {
-  const data = {
-    token,
-    siteRootUrl: config.rootUrl,
-  };
-
-  return emailHelper.sendEmailTemplate('password_reset', data, {
-    to: email,
-    from: config.email.fromNoReply,
   });
 }
 

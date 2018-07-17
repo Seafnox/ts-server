@@ -1,186 +1,179 @@
 import { find } from 'lodash';
 import { randomBytes } from 'crypto';
-
 import db from '../database/dbConnector';
 import AppError from '../appError';
+import { IUser, IUserLocalProfile } from '../database/models/user';
 
 export default {
-  getUserByEmail,
-  getLocalUserByEmail,
-  saveLocalAccount,
-  getUserById,
-  getUsers,
-  getUserByActivationToken,
-  refreshActivationToken,
-  activateUser,
-  updateUser,
-  removeUser,
-  resetPassword,
-  updateUserPassword,
-  getUserByResetToken,
-  refreshResetToken,
+    getUserByEmail,
+    getLocalUserByEmail,
+    saveLocalAccount,
+    getUserById,
+    getUsers,
+    getUserByActivationToken,
+    refreshActivationToken,
+    activateUser,
+    removeUser,
+    resetPassword,
+    updateUserPassword,
+    getUserByResetToken,
+    refreshResetToken,
 };
 
-async function getUserByEmail(email) {
-  const User = db.models.User;
+async function getUserByEmail(email: string) {
+    const User = db.models.User;
 
-  return await User.findOne({email});
+    return await User.findOne({email});
 }
 
 async function getLocalUserByEmail(email: string) {
-  const user = await getUserByEmail(email);
+    const user = await getUserByEmail(email);
 
-  const noLocalProfile = !user || !user.profile.local;
+    const noLocalProfile = !user || !user.profile.local;
 
-  if (noLocalProfile) { return null; }
+    if (noLocalProfile) {
+        return null;
+    }
 
-  return user;
+    return user;
 }
 
-async function saveLocalAccount(user, userData) {
-  const User = db.models.User;
+async function saveLocalAccount(user: IUser, userData: IUserLocalProfile) {
+    const User = db.models.User;
+    const activationToken = generateActivationToken();
 
-  const localProfile: any = {};
+    const localProfile: IUserLocalProfile = {
+        email: userData.email,
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        password: new User().generateHash(userData.password),
+        isActivated: false,
+        activation: {
+            token: activationToken,
+            created: new Date().toString(),
+        },
+    };
 
-  localProfile.firstName = userData.firstName;
-  localProfile.lastName = userData.lastName;
-  localProfile.email = userData.email;
-  localProfile.password = new User().generateHash(userData.password);
+    if (user) {
+        user.email = userData.email;
+        user.profile.local = localProfile;
 
-  const activationToken = generateActivationToken();
-  localProfile.activation = {
-    token: activationToken,
-    created: new Date(),
-  };
-
-  localProfile.isActivated = false;
-
-  if (user) {
-    user.email = userData.email;
-    user.profile.local = localProfile;
-
-    return await user.save();
-  } else {
-    return await User.create({
-      email: userData.email,
-      profile: {
-        local: localProfile,
-      },
-    });
-  }
+        return await user.save();
+    } else {
+        return await User.create({
+            email: userData.email,
+            profile: {
+                local: localProfile,
+            },
+        });
+    }
 }
 
-async function getUserById(id) {
-  const User = db.models.User;
+async function getUserById(id: string) {
+    const User = db.models.User;
 
-  return await User.findById(id);
+    return await User.findById(id);
 }
 
 async function getUsers() {
-  const User = db.models.User;
+    const User = db.models.User;
 
-  return await User.find();
+    return await User.find();
 }
 
 async function getUserByActivationToken(token: string) {
-  const users = await getUsers();
+    const users = await getUsers();
 
-  const findUser = find(users, (user: any) => {
-    return user.profile.local && user.profile.local.activation.token === token;
-  });
-
-  return findUser;
+    return find(users, (user: IUser) => {
+        return user.profile.local && user.profile.local.activation.token === token;
+    });
 }
 
-async function refreshActivationToken(userId: number) {
-  const user = await getUserById(userId);
+async function refreshActivationToken(userId: string) {
+    const user = await getUserById(userId);
 
-  if (!user) { throw new AppError(''); }
+    if (!user) {
+        throw new AppError('');
+    }
 
-  user.profile.local.activation = {
-    token: generateActivationToken(),
-    created: new Date().toString(),
-  };
+    user.profile.local.activation = {
+        token: generateActivationToken(),
+        created: new Date().toString(),
+    };
 
-  return await user.save();
+    return await user.save();
 }
 
-async function activateUser(userId: number) {
-  const user = await getUserById(userId);
+async function activateUser(userId: string) {
+    const user = await getUserById(userId);
 
-  if (!user) { throw new AppError('User not found.'); }
+    if (!user) {
+        throw new AppError('User not found.');
+    }
 
-  user.profile.local.activation = undefined;
-  user.profile.local.isActivated = true;
+    user.profile.local.activation = undefined;
+    user.profile.local.isActivated = true;
 
-  return await user.save();
+    return await user.save();
 }
 
-async function updateUser(userData) {
-  const user = await getUserByEmail(userData.email.toLowerCase());
+async function removeUser(id: string) {
+    const User = db.models.User;
 
-  if (!user) { return; }
-
-  user.firstName = userData.firstName;
-  user.lastName = userData.lastName;
-
-  return await user.save();
+    return await User.remove({_id: id});
 }
 
-async function removeUser(id) {
-  const User = db.models.User;
+async function resetPassword(userId: string) {
+    const user = await getUserById(userId);
 
-  return await User.remove({_id: id});
+    if (!user) {
+        throw new AppError('Cannot find user by Id');
+    }
+
+    user.profile.local.reset = {
+        token: generateActivationToken(),
+        created: new Date().toString(),
+    };
+
+    return await user.save();
 }
 
-async function resetPassword(userId: number) {
-  const user = await getUserById(userId);
+async function updateUserPassword(userId: string, password: string) {
+    const user = await getUserById(userId);
 
-  if (!user) { throw new AppError('Cannot find user by Id'); }
+    if (!user) {
+        throw new AppError('Cannot find user');
+    }
 
-  user.profile.local.reset = {
-    token: generateActivationToken(),
-    created: new Date().toString(),
-  };
+    user.profile.local.reset = undefined;
+    user.profile.local.password = user.generateHash(password);
 
-  return await user.save();
-}
-
-async function updateUserPassword(userId: number, password: string) {
-  const user = await getUserById(userId);
-
-  if (!user) { throw new AppError('Cannot find user'); }
-
-  user.profile.local.reset = undefined;
-  user.profile.local.password = user.generateHash(password);
-
-  return await user.save();
+    return await user.save();
 }
 
 async function getUserByResetToken(token: string) {
-  const users = await getUsers();
+    const users = await getUsers();
 
-  const findUser = find(users, (user: any) => {
-    return user.profile.local && user.profile.local.reset.token === token;
-  });
-
-  return findUser;
+    return find(users, (user: IUser) => {
+        return user.profile.local && user.profile.local.reset.token === token;
+    });
 }
 
-async function refreshResetToken(userId: number) {
-  const user = await getUserById(userId);
+async function refreshResetToken(userId: string) {
+    const user = await getUserById(userId);
 
-  if (!user) { throw new AppError('Cannot find user'); }
+    if (!user) {
+        throw new AppError('Cannot find user');
+    }
 
-  user.profile.local.reset = {
-    token: generateActivationToken(),
-    created: new Date().toString(),
-  };
+    user.profile.local.reset = {
+        token: generateActivationToken(),
+        created: new Date().toString(),
+    };
 
-  return await user.save();
+    return await user.save();
 }
 
 function generateActivationToken(): string {
-  const token = randomBytes(32).toString('hex');
-  return token;
+    return randomBytes(32).toString('hex');
 }

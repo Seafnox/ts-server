@@ -1,8 +1,8 @@
 import { Route } from '@angular/router';
 
-export interface AppRoute extends Route {
+export interface IAppRoute extends Route {
     title?: string;
     prevRoute?: string;
 }
 
-export type AppRoutes = AppRoute[];
+export type AppRoutes = IAppRoute[];

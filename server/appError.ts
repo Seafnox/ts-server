@@ -1,21 +1,22 @@
 import { isString } from 'lodash';
+import { IDictionary } from './interfaces/dictionary';
 
 interface IAppError {
   code: string;
-  data: any;
+  data: IDictionary;
   message: string;
   isAppError: boolean;
 }
 
 interface IAppErrorData {
   code: string;
-  data?: any;
+  data?: IDictionary;
 }
 
 export class AppError implements IAppError {
   message = 'Server Error';
   code = '';
-  data: any;
+  data: IDictionary;
   isAppError = true;
 
   constructor(errorData: IAppErrorData | string) {
