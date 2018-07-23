@@ -1,29 +1,27 @@
 import dbCreator from './database/dbCreator';
 
 export default {
-  run,
-  seed,
+    run,
+    seed,
 };
 
 const tasks = [{name: 'seed', description: 'Seeds DB with initial data.'}];
 
-async function run(task) {
-  if (!task) {
-    return console.warn('Please, specify task to run.');
-  }
+async function run(task: string) {
+    if (!task) {
+        return console.warn('Please, specify task to run.');
+    }
 
-  switch (task) {
-    case 'list':
-      console.info(tasks);
-      break;
-    case 'seed':
-      await seed();
-      break;
-    default:
-      console.error(`Unknown task "${task}".`);
-  }
+    const taskRunners: Record<string, () => void> = {
+        list: async () => console.info(tasks),
+        seed: async () => await seed(),
+    };
+
+    if (typeof taskRunners[task] !== 'function') {
+        return console.error(`Unknown task "${task}".`);
+    }
 }
 
 async function seed() {
-  await dbCreator.createDb();
+    await dbCreator.createDb();
 }

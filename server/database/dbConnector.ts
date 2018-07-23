@@ -1,27 +1,8 @@
 import mongoose = require('mongoose');
 import config from '../config';
 import logger from '../logger';
-import { ModelNames } from './modelNames.enum';
-import { CategoryModel } from './models/category';
-import { ProductModel } from './models/product';
-import { UserModel } from './models/user';
-import { ArticleModel } from './models/article';
-import { ProductImageModel } from './models/product_image';
 
-const models = {
-    [ModelNames.User]: UserModel,
-    [ModelNames.Product]: ProductModel,
-    [ModelNames.Category]: CategoryModel,
-    [ModelNames.Article]: ArticleModel,
-    [ModelNames.ProductImage]: ProductImageModel,
-};
-
-export default {
-    init,
-    models,
-};
-
-async function init() {
+export async function init() {
     mongoose.Promise = Promise;
 
     const connectionStr = getConnectionString();

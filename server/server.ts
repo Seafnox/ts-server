@@ -3,67 +3,62 @@ import * as morgan from 'morgan';
 import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
 import { isError } from 'lodash';
-import db from './database/dbConnector';
+import { init } from './database/dbConnector';
 
 import config from './config';
-import routes from './routes/routes';
+import { AppRouter } from './router/AppRouter';
 import logger from './logger';
 import pathHelper from './helpers/pathHelper';
+import { IApplicationRequest } from './interfaces/ApplicationRequest';
+import { Response } from 'express';
+import { Server } from 'http';
 
 const app = express();
 
-export default {
-  start,
-};
+export function startServer(port: string): Server {
+    initExpress();
 
-function start(port: string): Promise<string> {
-  initExpress();
+    AppRouter.Instance.init(app);
 
-  routes.init(app);
+    initErrorHandling();
 
-  initErrorHandling();
+    init();
 
-  db.init();
+    if (config.isDevLocal) {
+        app.use(morgan('dev'));
+    }
 
-  if (config.isDevLocal) {
-    app.use(morgan('dev'));
-  }
-
-  return new Promise((resolve, reject) => {
-    app.listen(port, () => {
-      return resolve(port);
-    });
-  });
+    return app.listen(port);
 }
 
 function initExpress() {
-  if (config.isDevLocal) { app.use(morgan('dev')); } // log requests
+    if (config.isDevLocal) {
+        app.use(morgan('dev'));
+    } // log requests
 
-  app.use(bodyParser.json()); // get information from html forms
-  app.use(bodyParser.urlencoded({extended: true}));
+    app.use(bodyParser.json()); // get information from html forms
+    app.use(bodyParser.urlencoded({extended: true}));
 
-  app.use('/', express.static(pathHelper.getClientRelative('/')));
+    app.use('/', express.static(pathHelper.getClientRelative('/')));
 
-  app.use(cors());
+    app.use(cors());
 
-  initSession();
+    initSession();
 }
 
 function initSession() {
-  const cookieParser = require('cookie-parser');
-  app.use(cookieParser());
+    const cookieParser = require('cookie-parser');
+    app.use(cookieParser());
 }
 
 function initErrorHandling() {
-  // log unhandled errors
-  app.use((err: Error, req, res, next) => {
-    logger.error(err);
+    // log unhandled errors
+    app.use((err: Error, req: IApplicationRequest, res: Response) => {
+        logger.error(err);
 
-    console.error(err);
+        let message = isError(err) ? err.message : err;
+        message = config.isDevLocal ? message : 'Server Error';
 
-    let message = isError(err) ? err.message : err;
-    message = config.isDevLocal ? message : 'Server Error';
-
-    res.status(500).send({error: message});
-  });
+        res.status(500).send({error: message});
+    });
 }

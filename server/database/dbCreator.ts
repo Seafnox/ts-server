@@ -1,4 +1,4 @@
-import db from './dbConnector';
+import { init } from './dbConnector';
 import seeder from './seeders/seederDefault';
 
 export default {
@@ -7,9 +7,9 @@ export default {
 
 async function createDb() {
   try {
-    await db.init();
+    await init();
 
-    await seeder.seedData(db);
+    await seeder.seedData();
 
     console.info('DB was seeded!');
   } catch (err) {

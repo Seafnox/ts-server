@@ -1,5 +1,4 @@
 import mongoose = require('mongoose');
-import bcrypt = require('bcrypt-nodejs');
 import { ModelNames } from '../modelNames.enum';
 import { IDictionary } from '../../interfaces/dictionary';
 
@@ -10,8 +9,6 @@ export interface IUser extends mongoose.Document {
         google?: IDictionary;
         facebook?: IDictionary;
     };
-
-    generateHash(password: string): string;
 }
 
 export interface IUserLocalProfile {
@@ -80,10 +77,5 @@ const schema = new mongoose.Schema({
         facebook: {},
     },
 });
-
-// generating a hash
-schema.methods.generateHash = (password: string) => {
-    return bcrypt.hashSync(password, bcrypt.genSaltSync(8));
-};
 
 export const UserModel = mongoose.model<IUser>(ModelNames.User, schema);
