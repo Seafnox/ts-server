@@ -4,7 +4,6 @@ process.on('uncaughtException', (err) => {
 
 import { startServer } from './server';
 import config from './config';
-import logger from './logger';
 import tasks from './tasks';
 
 async function start(): Promise<void> {
@@ -18,7 +17,7 @@ async function start(): Promise<void> {
 
     console.info(`Server is listening on port ${port}!`);
 
-    logger.info(`Server started.`);
+    console.info(`Server started.`);
 }
 
 async function run(): Promise<void> {

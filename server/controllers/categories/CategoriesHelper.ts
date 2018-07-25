@@ -3,6 +3,7 @@ import { Observable } from 'rxjs/internal/Observable';
 import { fromPromise } from 'rxjs/internal-compatibility';
 import { switchMap, take } from 'rxjs/operators';
 import { throwError } from 'rxjs/internal/observable/throwError';
+import { string, SchemaLike } from 'joi';
 
 export class CategoriesHelper {
     public static getCategoryById(id: string): Observable<ICategory> {
@@ -39,8 +40,30 @@ export class CategoriesHelper {
             );
     }
 
-    public static removeCategory(id: string): Observable<ICategory> {
+    public static destroyCategory(id: string): Observable<ICategory> {
         return fromPromise(CategoryModel.findOneAndRemove({_id: id}).exec())
             .pipe(take(1));
+    }
+
+    public static get createCategorySchema(): SchemaLike {
+        return {
+            id: string().allow(null),
+            title: string().required(),
+            description: string().required(),
+        };
+    }
+
+    public static get updateCategorySchema(): SchemaLike {
+        return {
+            id: string().required(),
+            title: string().required(),
+            description: string().required(),
+        };
+    }
+
+    public static get destroyCategorySchema(): SchemaLike {
+        return {
+            id: string().required(),
+        };
     }
 }

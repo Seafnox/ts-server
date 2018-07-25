@@ -8,41 +8,46 @@ let errorLogger: LoggerInstance = null;
 let generalLogger: LoggerInstance = null;
 
 export default {
-  error: logError,
-  info,
+    error: logError,
+    info,
 };
 
 function initLoggers() {
-  const logPath = pathHelper.getLocalRelative('./logs');
+    const logPath = pathHelper.getLocalRelative('./logs');
 
-  fs.ensureDirSync(logPath);
+    fs.ensureDirSync(logPath);
 
-  const errorLogPath = pathHelper.getLocalRelative('./logs/errors.log');
-  const infoLogPath = pathHelper.getLocalRelative('./logs/info.log');
+    const errorLogPath = pathHelper.getLocalRelative('./logs/errors.log');
+    const infoLogPath = pathHelper.getLocalRelative('./logs/info.log');
 
-  errorLogger = new winston.Logger({
-    transports: [new winston.transports.File({filename: errorLogPath})],
-  });
+    errorLogger = new winston.Logger({
+        transports: [new winston.transports.File({filename: errorLogPath})],
+    });
 
-  winston.handleExceptions(new winston.transports.File({filename: errorLogPath}));
+    winston.handleExceptions(new winston.transports.File({filename: errorLogPath}));
 
-  generalLogger = new winston.Logger({
-    transports: [new winston.transports.File({filename: infoLogPath})],
-  });
+    generalLogger = new winston.Logger({
+        transports: [new winston.transports.File({filename: infoLogPath})],
+    });
 }
 
 initLoggers();
 
-function logError(err: Error | any): void {
-  console.error(err);
-
-  if (isError(err)) {
-    errorLogger.error('Error', {errorMessage: err.message, stack: err.stack});
-  } else {
-    errorLogger.error(err);
-  }
+function logError(err: any): void {
+    console.error(err.toString());
+    if (isError(err)) {
+        errorLogger.error(err.message, {
+            message: err.message,
+            status: err.status,
+            body: err.body,
+            type: err.type,
+            stack: err.stack,
+        });
+    } else {
+        errorLogger.error(err);
+    }
 }
 
 function info(message: string, metadata = {}): void {
-  generalLogger.info(message, metadata);
+    generalLogger.info(message, metadata);
 }
