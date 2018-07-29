@@ -2,6 +2,7 @@ import { UsersController } from '../controllers/users/UsersController';
 import { CategoriesController } from '../controllers/categories/categoriesController';
 import { IRouterHelperConfig } from '../interfaces/RouterHelperConfig';
 import { ControllerAction } from '../interfaces/ControllerAction';
+import { ProductController } from '../controllers/product/productController';
 
 enum RouteMethods {
     get = 'get',
@@ -10,12 +11,19 @@ enum RouteMethods {
     delete = 'delete',
 }
 
+export interface IRouteConfig {
+    url: string;
+    method: RouteMethods;
+    action: ControllerAction;
+    options?: IRouterHelperConfig;
+}
+
 export const RouteConfigs: Record<string, IRouteConfig[]> = {
     categoriesApi: [
         {
             url: '/api/categories',
             method: RouteMethods.get,
-            action: CategoriesController.getList,
+            action: CategoriesController.getAll,
             options: {auth: false},
         },
         {
@@ -25,11 +33,25 @@ export const RouteConfigs: Record<string, IRouteConfig[]> = {
             options: {auth: false},
         },
     ],
+    productApi: [
+        {
+            url: '/api/products',
+            method: RouteMethods.get,
+            action: ProductController.getAll,
+            options: {auth: false},
+        },
+        {
+            url: '/api/products/:id',
+            method: RouteMethods.get,
+            action: ProductController.get,
+            options: {auth: false},
+        },
+    ],
     usersApi: [
         {
             url: '/api/users',
             method: RouteMethods.get,
-            action: UsersController.getUsers,
+            action: UsersController.getAll,
             options: {auth: false},
         },
         {
@@ -99,11 +121,36 @@ export const RouteConfigs: Record<string, IRouteConfig[]> = {
             action: CategoriesController.delete,
         },
     ],
+    admin_products: [
+        {
+            url: '/api/categories/:categoryId/products',
+            method: RouteMethods.post,
+            action: ProductController.post,
+        },
+        {
+            url: '/api/products',
+            method: RouteMethods.post,
+            action: ProductController.post,
+        },
+        {
+            url: '/api/products/:id',
+            method: RouteMethods.put,
+            action: ProductController.put,
+        },
+        {
+            url: '/api/products/:id/addCategory/:categoryId',
+            method: RouteMethods.put,
+            action: ProductController.addInCategory,
+        },
+        {
+            url: '/api/products/:id/removeCategory/:categoryId',
+            method: RouteMethods.put,
+            action: ProductController.removeFromCategory,
+        },
+        {
+            url: '/api/products/:id',
+            method: RouteMethods.delete,
+            action: ProductController.delete,
+        },
+    ],
 };
-
-export interface IRouteConfig {
-    url: string;
-    method: RouteMethods;
-    action: ControllerAction;
-    options?: IRouterHelperConfig;
-}

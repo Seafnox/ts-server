@@ -3,36 +3,37 @@ import { Observable } from 'rxjs/internal/Observable';
 import { fromPromise } from 'rxjs/internal-compatibility';
 import { switchMap, take } from 'rxjs/operators';
 import { throwError } from 'rxjs/internal/observable/throwError';
-import { string, SchemaLike } from 'joi';
+import { string, SchemaLike, forbidden } from 'joi';
 
 export class CategoriesHelper {
-    public static getCategoryById(id: string): Observable<ICategory> {
+    public static makeFindById(id: string): Observable<ICategory> {
         return fromPromise(CategoryModel.findById(id).exec())
             .pipe(take(1));
     }
 
-    public static getCategories(): Observable<ICategory[]> {
+    public static makeFindAll(): Observable<ICategory[]> {
         return fromPromise(CategoryModel.find({}).sort({title: 1}).exec())
             .pipe(take(1));
     }
 
-    public static addCategory(userId: string, categoryData: ICategory): Observable<ICategory> {
+    public static makeCreate(userId: string, categoryData: ICategory): Observable<ICategory> {
         categoryData.userId = userId;
 
         return fromPromise(CategoryModel.create(categoryData))
             .pipe(take(1));
     }
 
-    public static updateCategory(categoryData: ICategory): Observable<ICategory> {
-        return CategoriesHelper.getCategoryById(categoryData.id)
+    public static makeUpdate(id: string, categoryData: Partial<ICategory>): Observable<ICategory> {
+        return CategoriesHelper.makeFindById(id)
             .pipe(
-                switchMap((category: ICategory) => {
+                switchMap((category) => {
                     if (!category) {
                         return throwError(new Error(`No Category by id: ${categoryData.id}`));
                     }
 
-                    category.title = categoryData.title;
-                    category.description = categoryData.description;
+                    Object.keys(categoryData).forEach((key) =>
+                        // @ts-ignore
+                        category[key] = categoryData[key] || category[key]);
 
                     return fromPromise<ICategory>(category.save());
                 }),
@@ -40,30 +41,28 @@ export class CategoriesHelper {
             );
     }
 
-    public static destroyCategory(id: string): Observable<ICategory> {
+    public static makeDestroy(id: string): Observable<ICategory> {
         return fromPromise(CategoryModel.findOneAndRemove({_id: id}).exec())
             .pipe(take(1));
     }
 
-    public static get createCategorySchema(): SchemaLike {
+    public static get creationSchema(): SchemaLike {
         return {
             id: string().allow(null),
+            name: string().required(),
             title: string().required(),
             description: string().required(),
+            userId: forbidden(),
         };
     }
 
-    public static get updateCategorySchema(): SchemaLike {
+    public static get updationSchema(): SchemaLike {
         return {
-            id: string().required(),
-            title: string().required(),
-            description: string().required(),
-        };
-    }
-
-    public static get destroyCategorySchema(): SchemaLike {
-        return {
-            id: string().required(),
+            id: forbidden(),
+            name: string(),
+            title: string(),
+            description: string(),
+            userId: forbidden(),
         };
     }
 }

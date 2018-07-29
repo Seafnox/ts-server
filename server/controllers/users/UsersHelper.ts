@@ -95,12 +95,9 @@ export class UsersHelper {
                     }
 
                     user.email = localProfile.email || user.email;
-                    user.profile.local = {
-                        ...user.profile.local,
-                        email: localProfile.email || user.profile.local.email,
-                        firstName: localProfile.firstName || user.profile.local.firstName,
-                        lastName: localProfile.lastName || user.profile.local.lastName,
-                    };
+                    Object.keys(localProfile).forEach((key) =>
+                        // @ts-ignore
+                        user.profile.local[key] = localProfile[key] || user.profile.local[key]);
 
                     return fromPromise<IUser>(user.save());
                 }),

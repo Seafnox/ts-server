@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 import { IAppAnswer } from '../../interfaces/ControllerAction';
 
 export class UsersController {
-    public static getUsers(): Observable<IAppAnswer> {
+    public static getAll(): Observable<IAppAnswer> {
         return UsersHelper.getUsers().pipe(map((data) => ({data})));
     }
 
