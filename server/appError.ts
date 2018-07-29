@@ -16,8 +16,10 @@ interface IAppErrorData {
 export class AppError implements IAppError {
   message = 'Server Error';
   code = '';
-  data: IDictionary;
+  data: IDictionary = null;
   isAppError = true;
+  isValidationError = false;
+  isActionError = false;
 
   constructor(errorData: IAppErrorData | string) {
     Error.captureStackTrace(this, this.constructor);

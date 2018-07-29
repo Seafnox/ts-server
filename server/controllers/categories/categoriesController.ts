@@ -1,49 +1,50 @@
-import { IApplicationRequest } from '../../interfaces/ApplicationRequest';
-import { Response } from 'express';
+import { IAppRequest } from '../../interfaces/AppRequest';
 import { CategoriesHelper } from './CategoriesHelper';
-import { ICategory } from '../../database/models/category';
 import { ControllerHelper } from '../_helper/ControllerHelper';
+import { Observable } from 'rxjs';
+import { IAppAnswer } from '../../interfaces/ControllerAction';
+import { map } from 'rxjs/operators';
 
 export class CategoriesController {
-    public static getList(req: IApplicationRequest, res: Response): void {
-        CategoriesHelper.getCategories()
-            .subscribe((categories: ICategory[]) => {
-                ControllerHelper.Instance.sendData(categories, res);
-            });
+    public static getList(req: IAppRequest): Observable<IAppAnswer> {
+        return CategoriesHelper.getCategories()
+            .pipe(map((categories) => ({
+                data: categories,
+            })));
     }
 
-    public static get(req: IApplicationRequest, res: Response): void {
-        CategoriesHelper.getCategoryById(req.params.id)
-            .subscribe((category: ICategory) => {
-                ControllerHelper.Instance.sendData(category, res);
-            });
+    public static get(req: IAppRequest): Observable<IAppAnswer> {
+        return CategoriesHelper.getCategoryById(req.params.id)
+            .pipe(map((category) => ({
+                data: category,
+            })));
     }
 
-    public static post(req: IApplicationRequest, res: Response): void {
+    public static post(req: IAppRequest): Observable<IAppAnswer> {
         const data = ControllerHelper.Instance.loadSchema(req.body, CategoriesHelper.createCategorySchema);
         const userId = req.currentUser._id;
 
-        CategoriesHelper.addCategory(userId, data)
-            .subscribe((category) => {
-                ControllerHelper.Instance.sendData(category, res);
-            });
+        return CategoriesHelper.addCategory(userId, data)
+            .pipe(map((category) => ({
+                data: category,
+            })));
     }
 
-    public static put(req: IApplicationRequest, res: Response): void {
+    public static put(req: IAppRequest): Observable<IAppAnswer> {
         const data = ControllerHelper.Instance.loadSchema(req.body, CategoriesHelper.updateCategorySchema);
 
-        CategoriesHelper.updateCategory(data)
-            .subscribe((category) => {
-                ControllerHelper.Instance.sendData(category, res);
-            });
+        return CategoriesHelper.updateCategory(data)
+            .pipe(map((category) => ({
+                data: category,
+            })));
     }
 
-    public static delete(req: IApplicationRequest, res: Response): void {
+    public static delete(req: IAppRequest): Observable<IAppAnswer> {
         const data = ControllerHelper.Instance.loadSchema(req.body, CategoriesHelper.destroyCategorySchema);
 
-        CategoriesHelper.destroyCategory(data.id)
-            .subscribe((category) => {
-                ControllerHelper.Instance.sendData(category, res);
-            });
+        return CategoriesHelper.destroyCategory(data.id)
+            .pipe(map((category) => ({
+                data: category,
+            })));
     }
 }

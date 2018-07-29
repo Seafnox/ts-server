@@ -1,6 +1,6 @@
 import mongoose = require('mongoose');
 import config from '../config';
-import logger from '../logger';
+import { logError } from '../logger';
 
 export async function init() {
     mongoose.Promise = Promise;
@@ -12,8 +12,8 @@ export async function init() {
             connectTimeoutMS: config.db.timeout,
         });
     } catch (err) {
-        logger.error('Could not connect to MongoDB!');
-        logger.error(err);
+        logError('Could not connect to MongoDB!');
+        logError(err);
     }
 
 }

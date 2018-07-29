@@ -1,6 +1,6 @@
 import { IDecodedJWTInfo } from './DecodedJWTInfo';
 import { Request } from 'express';
 
-export interface IApplicationRequest extends Request {
+export interface IAppRequest extends Request {
     currentUser: IDecodedJWTInfo;
 }

@@ -1,4 +1,12 @@
-import { IApplicationRequest } from './ApplicationRequest';
-import { NextFunction, Response } from 'express';
+import { IAppRequest } from './AppRequest';
+import { IDictionary } from './dictionary';
+import { Observable } from 'rxjs';
 
-export type ControllerAction = (request: IApplicationRequest, response: Response, next?: NextFunction) => void;
+export interface IAppAnswer {
+    status?: number;
+    statusMessage?: string;
+    data?: IDictionary;
+    fileUrl?: string;
+}
+
+export type ControllerAction = (req: IAppRequest) => Observable<IAppAnswer>;

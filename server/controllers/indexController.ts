@@ -1,9 +1,11 @@
 import pathHelper from '../helpers/pathHelper';
-import { IApplicationRequest } from '../interfaces/ApplicationRequest';
-import { Response } from 'express';
+import { Observable, of } from 'rxjs';
+import { IAppAnswer } from '../interfaces/ControllerAction';
 
 export class IndexController {
-    public static index(req: IApplicationRequest, res: Response): void {
-        res.sendFile(pathHelper.getClientRelative('index.html'));
+    public static index(): Observable<IAppAnswer> {
+        return of({
+            fileUrl: pathHelper.getClientRelative('index.html'),
+        });
     }
 }

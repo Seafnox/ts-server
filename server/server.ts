@@ -2,16 +2,14 @@ import * as express from 'express';
 import * as morgan from 'morgan';
 import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
-import { isError } from 'lodash';
 import { init } from './database/dbConnector';
-
 import config from './config';
 import { AppRouter } from './router/AppRouter';
-import logger from './logger';
 import pathHelper from './helpers/pathHelper';
-import { IApplicationRequest } from './interfaces/ApplicationRequest';
+import { IAppRequest } from './interfaces/AppRequest';
 import { NextFunction, Response } from 'express';
 import { Server } from 'http';
+import { ControllerHelper } from './controllers/_helper/ControllerHelper';
 
 const app = express();
 
@@ -49,21 +47,17 @@ function initSession() {
 }
 
 function errorHandler() {
-    return (err: Error, req: IApplicationRequest, res: Response, next: NextFunction) => {
+    return (err: Error, req: IAppRequest, res: Response, next: NextFunction) => {
         if (!(err instanceof Error)) {
             console.error('WTF', err);
             return next();
         }
-        logger.error(err);
 
-        let message = isError(err) ? err.message : err;
-        message = config.isDevLocal ? message : 'Server Error';
-
-        res.status(500).send({error: message});
+        return ControllerHelper.Instance.handleError(err, res);
     };
 }
 
-function bodyParserJsonWrapper(req: IApplicationRequest, res: Response, next: NextFunction) {
+function bodyParserJsonWrapper(req: IAppRequest, res: Response, next: NextFunction) {
     bodyParser.json()(req, res, (err: Error) => {
         if (err) {
             return errorHandler()(err, req, res, next);

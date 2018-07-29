@@ -7,11 +7,6 @@ import { LoggerInstance } from 'winston';
 let errorLogger: LoggerInstance = null;
 let generalLogger: LoggerInstance = null;
 
-export default {
-    error: logError,
-    info,
-};
-
 function initLoggers() {
     const logPath = pathHelper.getLocalRelative('./logs');
 
@@ -33,21 +28,23 @@ function initLoggers() {
 
 initLoggers();
 
-function logError(err: any): void {
+export function logError(err: Error | string): void {
     console.error(err.toString());
+
     if (isError(err)) {
         errorLogger.error(err.message, {
             message: err.message,
             status: err.status,
             body: err.body,
             type: err.type,
+            data: err.data,
             stack: err.stack,
         });
     } else {
-        errorLogger.error(err);
+        errorLogger.error(err.toString());
     }
 }
 
-function info(message: string, metadata = {}): void {
+export function logInfo(message: string, metadata = {}): void {
     generalLogger.info(message, metadata);
 }
