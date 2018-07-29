@@ -25,6 +25,20 @@ export const RouteConfigs: Record<string, IRouteConfig[]> = {
             options: {auth: false},
         },
     ],
+    usersApi: [
+        {
+            url: '/api/users',
+            method: RouteMethods.get,
+            action: UsersController.getUsers,
+            options: {auth: false},
+        },
+        {
+            url: '/api/users/:id',
+            method: RouteMethods.get,
+            action: UsersController.getUser,
+            options: {auth: false},
+        },
+    ],
     auth: [
         {
             url: '/api/current_user',

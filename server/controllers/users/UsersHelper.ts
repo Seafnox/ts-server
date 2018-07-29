@@ -159,18 +159,18 @@ export class UsersHelper {
             .pipe(
                 switchMap((user: IUser) => {
                     if (!user) {
-                        return throwError(new Error(userHelperErrorTexts.NO_USER_FOUND_BY_ACTIVATION_TOKEN(token)));
+                        throw new Error(userHelperErrorTexts.NO_USER_FOUND_BY_ACTIVATION_TOKEN(token));
                     }
 
                     if (!user.profile.local) {
-                        return throwError(new Error(userHelperErrorTexts.NO_USER_LOCAL_PROFILE(user.email)));
+                        throw new Error(userHelperErrorTexts.NO_USER_LOCAL_PROFILE(user.email));
                     }
 
                     const activationTime = user.profile.local.activation.created;
                     const isTokenExpired = differenceInHours(activationTime, new Date()) > 24;
 
                     if (isTokenExpired) {
-                        return throwError(new Error(userHelperErrorTexts.TOKEN_TIMEOUT(user.email)));
+                        throw new Error(userHelperErrorTexts.TOKEN_TIMEOUT(user.email));
                     }
 
                     user.profile.local.activation = undefined;

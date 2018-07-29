@@ -9,6 +9,17 @@ import { catchError, switchMap } from 'rxjs/operators';
 import { throwError } from 'rxjs/internal/observable/throwError';
 
 export class UsersController {
+    public static getUsers(req: IApplicationRequest, res: Response): void {
+        UsersHelper.getUsers()
+            .subscribe((users) => ControllerHelper.Instance.sendData(users, res));
+    }
+
+    public static getUser(req: IApplicationRequest, res: Response): void {
+        const userId = req.params.id;
+        UsersHelper.getUserById(userId)
+            .subscribe((user) => ControllerHelper.Instance.sendData(user, res));
+    }
+
     public static getCurrentUser(req: IApplicationRequest, res: Response): void {
         const userId = req.currentUser._id;
 
@@ -31,23 +42,19 @@ export class UsersController {
         userData.email = userData.email.toLowerCase();
 
         UsersHelper.getUserByEmail(userData.email)
-            .subscribe((user) => {
-                if (user) {
-                    throw new AppError(`User with email '${userData.email} already exist'`);
-                }
+            .pipe(
+                switchMap((user) => {
+                    if (user) {
+                        throw new AppError(`User with email '${userData.email} already exist'`);
+                    }
 
-                const localProfile = user.profile.local;
+                    return UsersHelper.addUserByLocalProfile(userData);
+                }),
+            )
+            .subscribe(() => {
+                const message = 'Activation email was send. Please, check you inbox.';
 
-                if (localProfile && localProfile.isActivated) {
-                    throw new AppError('This email is already activated.');
-                }
-
-                UsersHelper.addUserByLocalProfile(userData)
-                    .subscribe(() => {
-                        const message = 'Activation email was send. Please, check you inbox.';
-
-                        return ControllerHelper.Instance.sendData({message}, res);
-                    });
+                return ControllerHelper.Instance.sendData({message}, res);
             });
     }
 
