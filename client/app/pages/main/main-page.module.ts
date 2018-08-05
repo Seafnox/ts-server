@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MainPage } from './main-page.component';
+import { MainPageComponent } from './main-page.component';
 import { ComponentsModule } from '../../components/components.module';
 import { WebStorageModule } from 'ngx-store';
 import { RouterModule } from '@angular/router';
@@ -24,7 +24,6 @@ import { MainIndexPageModule } from './main-index/main-index-page.module';
         MatToolbarModule,
         MatCardModule,
     ],
-    declarations: [MainPage],
+    declarations: [MainPageComponent],
 })
-export class MainPageModule {
-}
+export class MainPageModule {}

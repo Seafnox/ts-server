@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DashboardPage } from './dashboard-page.component';
+import { DashboardPageComponent } from './dashboard-page.component';
 
 @NgModule({
-  imports: [
-    CommonModule
-  ],
-  declarations: [DashboardPage]
+    imports: [
+        CommonModule,
+    ],
+    declarations: [DashboardPageComponent],
 })
-export class DashboardPageModule { }
+export class DashboardPageModule {}

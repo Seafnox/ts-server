@@ -1,31 +1,31 @@
-import { CategoriesPage } from './categories/categories-page.component';
-import { CategoryPage } from './category/category-page.component';
-import { ProductPage } from './product/product-page.component';
-import { MainPage } from './main-page.component';
+import { CategoriesPageComponent } from './categories/categories-page.component';
+import { CategoryPageComponent } from './category/category-page.component';
+import { ProductPageComponent } from './product/product-page.component';
+import { MainPageComponent } from './main-page.component';
 import { Routes } from '@angular/router';
-import { MainIndexPage } from './main-index/main-index-page.component';
+import { MainIndexPageComponent } from './main-index/main-index-page.component';
 
 export const mainPageRoutes: Routes = [
     {
         path: 'main',
-        component: MainPage,
+        component: MainPageComponent,
         children: [
             {
                 path: '',
-                component: MainIndexPage,
+                component: MainIndexPageComponent,
             },
             {
                 path: 'categories',
-                component: CategoriesPage,
+                component: CategoriesPageComponent,
             },
             {
                 path: 'products/:productId',
-                component: ProductPage,
+                component: ProductPageComponent,
             },
             {
                 path: 'categories/:categoryId',
-                component: CategoryPage,
+                component: CategoryPageComponent,
             },
-        ]
+        ],
     },
 ];

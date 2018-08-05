@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ModelUnitPage } from './model-unit-page.component';
+import { ModelUnitPageComponent } from './model-unit-page.component';
 
 @NgModule({
-  imports: [
-    CommonModule
-  ],
-  declarations: [ModelUnitPage]
+    imports: [
+        CommonModule,
+    ],
+    declarations: [ModelUnitPageComponent],
 })
-export class ModelUnitPageModule { }
+export class ModelUnitPageModule {}

@@ -1,25 +1,25 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MainIndexPage } from './main-index-page.component';
+import { MainIndexPageComponent } from './main-index-page.component';
 
-describe('MainIndexPage', () => {
-  let component: MainIndexPage;
-  let fixture: ComponentFixture<MainIndexPage>;
+describe('MainIndexPageComponent', () => {
+    let component: MainIndexPageComponent;
+    let fixture: ComponentFixture<MainIndexPageComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ MainIndexPage ]
-    })
-    .compileComponents();
-  }));
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+            declarations: [MainIndexPageComponent],
+        })
+            .compileComponents();
+    }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(MainIndexPage);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    beforeEach(() => {
+        fixture = TestBed.createComponent(MainIndexPageComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });

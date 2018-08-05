@@ -1,18 +1,19 @@
-import { AdminPage } from './pages/admin/admin-page.component';
-import { NotFoundPage } from './pages/not-found/not-found-page.component';
+import { AdminPageComponent } from './pages/admin/admin-page.component';
+import { NotFoundPageComponent } from './pages/not-found/not-found-page.component';
 import { Routes } from '@angular/router';
 
 export const appRoutes: Routes = [
-    { 	path: '',
+    {
+        path: '',
         redirectTo: 'main',
-        pathMatch: 'full'
+        pathMatch: 'full',
     },
     {
         path: 'admin',
-        component: AdminPage,
+        component: AdminPageComponent,
     },
     {
         path: '**',
-        component: NotFoundPage,
-    }
+        component: NotFoundPageComponent,
+    },
 ];

@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MainIndexPage } from './main-index-page.component';
+import { MainIndexPageComponent } from './main-index-page.component';
 
 @NgModule({
-  imports: [
-    CommonModule
-  ],
-  declarations: [MainIndexPage]
+    imports: [
+        CommonModule,
+    ],
+    declarations: [MainIndexPageComponent],
 })
-export class MainIndexPageModule { }
+export class MainIndexPageModule {}

@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CategoryPage } from './category-page.component';
+import { CategoryPageComponent } from './category-page.component';
 
 @NgModule({
-  imports: [
-    CommonModule
-  ],
-  declarations: [CategoryPage]
+    imports: [
+        CommonModule,
+    ],
+    declarations: [CategoryPageComponent],
 })
-export class CategoryPageModule { }
+export class CategoryPageModule {}

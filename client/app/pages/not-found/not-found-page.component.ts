@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-not-found',
-  templateUrl: './not-found-page.component.html',
-  styleUrls: ['./not-found-page.component.css']
+    selector: 'app-not-found',
+    templateUrl: './not-found-page.component.html',
+    styleUrls: ['./not-found-page.component.css'],
 })
-export class NotFoundPage {
+export class NotFoundPageComponent {
     public get location(): string {
         return window.location.pathname;
     }
