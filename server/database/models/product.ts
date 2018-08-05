@@ -1,7 +1,9 @@
 import * as mongoose from 'mongoose';
 import { ModelNames } from '../modelNames.enum';
 
-export interface IProduct extends mongoose.Document {
+export interface IProduct extends mongoose.Document, IProductData {}
+
+export interface IProductData {
     name: string;
     title: string;
     categories: string[];

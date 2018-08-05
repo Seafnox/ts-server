@@ -4,6 +4,7 @@ import { ProductHelper } from './ProductHelper';
 import { map, switchMap } from 'rxjs/operators';
 import { IAppRequest } from '../../interfaces/AppRequest';
 import { ControllerHelper } from '../_helper/ControllerHelper';
+import { IProductData } from '../../database/models/product';
 
 export class ProductController {
     public static getAll(): Observable<IAppAnswer> {
@@ -17,7 +18,7 @@ export class ProductController {
     }
 
     public static post(req: IAppRequest): Observable<IAppAnswer> {
-        const instanceData = ControllerHelper.Instance.loadSchema(req.body, ProductHelper.creationSchema);
+        const instanceData: IProductData = ControllerHelper.Instance.loadSchema(req.body, ProductHelper.creationSchema);
         const categoryId = req.params.categoryId;
         const userId = req.currentUser._id;
 
@@ -26,7 +27,7 @@ export class ProductController {
     }
 
     public static put(req: IAppRequest): Observable<IAppAnswer> {
-        const instanceData = ControllerHelper.Instance.loadSchema(req.body, ProductHelper.updationSchema);
+        const instanceData: Partial<IProductData> = ControllerHelper.Instance.loadSchema(req.body, ProductHelper.updationSchema);
 
         return ProductHelper.makeUpdate(req.params.id, instanceData)
             .pipe(map((data) => ({data})));

@@ -4,6 +4,7 @@ import { ControllerHelper } from '../_helper/ControllerHelper';
 import { Observable } from 'rxjs';
 import { IAppAnswer } from '../../interfaces/ControllerAction';
 import { map } from 'rxjs/operators';
+import { ICategoryData } from '../../database/models/category';
 
 export class CategoriesController {
     public static getAll(): Observable<IAppAnswer> {
@@ -17,7 +18,7 @@ export class CategoriesController {
     }
 
     public static post(req: IAppRequest): Observable<IAppAnswer> {
-        const instanceData = ControllerHelper.Instance.loadSchema(req.body, CategoriesHelper.creationSchema);
+        const instanceData: ICategoryData = ControllerHelper.Instance.loadSchema(req.body, CategoriesHelper.creationSchema);
         const userId = req.currentUser._id;
 
         return CategoriesHelper.makeCreate(userId, instanceData)
@@ -25,7 +26,7 @@ export class CategoriesController {
     }
 
     public static put(req: IAppRequest): Observable<IAppAnswer> {
-        const instanceData = ControllerHelper.Instance.loadSchema(req.body, CategoriesHelper.updationSchema);
+        const instanceData: Partial<ICategoryData> = ControllerHelper.Instance.loadSchema(req.body, CategoriesHelper.updationSchema);
 
         return CategoriesHelper.makeUpdate(req.params.id, instanceData)
             .pipe(map((data) => ({data})));

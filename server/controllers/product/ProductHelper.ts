@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { IProduct, ProductModel } from '../../database/models/product';
+import { IProduct, IProductData, ProductModel } from '../../database/models/product';
 import { fromPromise } from 'rxjs/internal-compatibility';
 import { switchMap, take } from 'rxjs/operators';
 import { throwError } from 'rxjs/internal/observable/throwError';
@@ -16,7 +16,7 @@ export class ProductHelper {
             .pipe(take(1));
     }
 
-    public static makeCreate(categoryId: string, userId: string, productData: IProduct): Observable<IProduct> {
+    public static makeCreate(categoryId: string, userId: string, productData: IProductData): Observable<IProduct> {
         productData.categories = categoryId ? [categoryId] : [];
         productData.userId = userId;
 
@@ -24,12 +24,12 @@ export class ProductHelper {
             .pipe(take(1));
     }
 
-    public static makeUpdate(id: string, productData: Partial<IProduct>): Observable<IProduct> {
+    public static makeUpdate(id: string, productData: Partial<IProductData>): Observable<IProduct> {
         return ProductHelper.makeFindById(id)
             .pipe(
                 switchMap((product) => {
                     if (!product) {
-                        return throwError(new Error(`No Category by id: ${productData.id}`));
+                        return throwError(new Error(`No Category by id: ${id}`));
                     }
 
                     Object.keys(productData).forEach((key) =>

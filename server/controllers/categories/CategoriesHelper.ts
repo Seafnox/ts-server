@@ -1,4 +1,4 @@
-import { CategoryModel, ICategory } from '../../database/models/category';
+import { CategoryModel, ICategory, ICategoryData } from '../../database/models/category';
 import { Observable } from 'rxjs/internal/Observable';
 import { fromPromise } from 'rxjs/internal-compatibility';
 import { switchMap, take } from 'rxjs/operators';
@@ -16,19 +16,19 @@ export class CategoriesHelper {
             .pipe(take(1));
     }
 
-    public static makeCreate(userId: string, categoryData: ICategory): Observable<ICategory> {
+    public static makeCreate(userId: string, categoryData: ICategoryData): Observable<ICategory> {
         categoryData.userId = userId;
 
         return fromPromise(CategoryModel.create(categoryData))
             .pipe(take(1));
     }
 
-    public static makeUpdate(id: string, categoryData: Partial<ICategory>): Observable<ICategory> {
+    public static makeUpdate(id: string, categoryData: Partial<ICategoryData>): Observable<ICategory> {
         return CategoriesHelper.makeFindById(id)
             .pipe(
                 switchMap((category) => {
                     if (!category) {
-                        return throwError(new Error(`No Category by id: ${categoryData.id}`));
+                        return throwError(new Error(`No Category by id: ${id}`));
                     }
 
                     Object.keys(categoryData).forEach((key) =>

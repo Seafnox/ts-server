@@ -2,7 +2,9 @@ import mongoose = require('mongoose');
 import { ModelNames } from '../modelNames.enum';
 import { IDictionary } from '../../interfaces/dictionary';
 
-export interface IUser extends mongoose.Document {
+export interface IUser extends mongoose.Document, IUserData {}
+
+export interface IUserData {
     email: string;
     profile: {
         local: IUserLocalProfile,

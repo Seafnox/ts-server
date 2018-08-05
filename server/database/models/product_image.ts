@@ -1,9 +1,12 @@
 import * as mongoose from 'mongoose';
 import { ModelNames } from '../modelNames.enum';
+import { Dictionary } from 'express-validator/shared-typings';
 
-export interface IProductImage extends mongoose.Document {
+export interface IProductImage extends mongoose.Document, IProductImageData {}
+
+export interface IProductImageData {
     url: string;
-    thumbs: string[];
+    thumbs: Dictionary<string>;
     userId?: string;
 }
 
@@ -14,7 +17,7 @@ const schema = new mongoose.Schema({
         unique: true,
     },
     thumbs: {
-        type: Array,
+        type: Object,
         required: true,
     },
     userId: {
