@@ -18,7 +18,7 @@ export class ProductController {
     }
 
     public static post(req: IAppRequest): Observable<IAppAnswer> {
-        const instanceData: IProductData = ControllerHelper.Instance.loadSchema(req.body, ProductHelper.creationSchema);
+        const instanceData: IProductData = ControllerHelper.Instance.validateDataBySchema(req.body, ProductHelper.creationSchema);
         const categoryId = req.params.categoryId;
         const userId = req.currentUser._id;
 
@@ -27,7 +27,7 @@ export class ProductController {
     }
 
     public static put(req: IAppRequest): Observable<IAppAnswer> {
-        const instanceData: Partial<IProductData> = ControllerHelper.Instance.loadSchema(req.body, ProductHelper.updationSchema);
+        const instanceData: Partial<IProductData> = ControllerHelper.Instance.validateDataBySchema(req.body, ProductHelper.updationSchema);
 
         return ProductHelper.makeUpdate(req.params.id, instanceData)
             .pipe(map((data) => ({data})));
@@ -39,7 +39,7 @@ export class ProductController {
     }
 
     public static addInCategory(req: IAppRequest): Observable<IAppAnswer> {
-        const params = ControllerHelper.Instance.loadSchema(req.params, ProductHelper.addCategodyParamsSchema);
+        const params = ControllerHelper.Instance.validateDataBySchema(req.params, ProductHelper.addCategodyParamsSchema);
         return ProductHelper.makeFindById(params.id)
             .pipe(
                 switchMap((product) => {
@@ -54,7 +54,7 @@ export class ProductController {
     }
 
     public static removeFromCategory(req: IAppRequest): Observable<IAppAnswer> {
-        const params = ControllerHelper.Instance.loadSchema(req.params, ProductHelper.removeCategodyParamsSchema);
+        const params = ControllerHelper.Instance.validateDataBySchema(req.params, ProductHelper.removeCategodyParamsSchema);
 
         return ProductHelper.makeFindById(params.id)
             .pipe(

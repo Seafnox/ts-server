@@ -15,13 +15,13 @@ export class UsersController {
 
     public static getUser(req: IAppRequest): Observable<IAppAnswer> {
         const userId = req.params.id;
-        return UsersHelper.getUserById(userId).pipe(map((data) => ({data})));
+        return UsersHelper.getUserById(userId).pipe(map((data) => ({data: data.toObject()})));
     }
 
     public static getCurrentUser(req: IAppRequest): Observable<IAppAnswer> {
         const userId = req.currentUser._id;
 
-        return UsersHelper.getUserById(userId).pipe(map((data) => ({data})));
+        return UsersHelper.getUserById(userId).pipe(map((data) => ({data: data.toObject()})));
     }
 
     public static signUpPost(req: IAppRequest): Observable<IAppAnswer> {
@@ -29,7 +29,7 @@ export class UsersController {
             throw new AppError('Log out before signing up.');
         }
 
-        const userData = ControllerHelper.Instance.loadSchema(req.body, UsersHelper.signUpSchema);
+        const userData = ControllerHelper.Instance.validateDataBySchema(req.body, UsersHelper.signUpSchema);
 
         if (userData.password !== userData.confirmPassword) {
             throw new AppError('Passwords do not confirmed.');
@@ -61,7 +61,7 @@ export class UsersController {
             throw new AppError('Log out before login.');
         }
 
-        const userData = ControllerHelper.Instance.loadSchema(req.body, UsersHelper.loginSchema);
+        const userData = ControllerHelper.Instance.validateDataBySchema(req.body, UsersHelper.loginSchema);
 
         return UsersHelper.getUserByEmail(userData.email.toLowerCase())
             .pipe(
@@ -91,7 +91,7 @@ export class UsersController {
     }
 
     public static forgotPassword(req: IAppRequest): Observable<IAppAnswer> {
-        const data = ControllerHelper.Instance.loadSchema(req.body, UsersHelper.forgotPasswordSchema);
+        const data = ControllerHelper.Instance.validateDataBySchema(req.body, UsersHelper.forgotPasswordSchema);
 
         const email = data.email.toLowerCase();
 
@@ -118,7 +118,7 @@ export class UsersController {
     }
 
     public static resetPasswordPost(req: IAppRequest): Observable<IAppAnswer> {
-        const data = ControllerHelper.Instance.loadSchema(req.body, UsersHelper.resetPasswordSchema);
+        const data = ControllerHelper.Instance.validateDataBySchema(req.body, UsersHelper.resetPasswordSchema);
 
         if (data.password !== data.confirmPassword) {
             throw new AppError('Passwords do not match.');

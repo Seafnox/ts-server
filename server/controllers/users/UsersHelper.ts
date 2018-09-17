@@ -8,6 +8,7 @@ import bcrypt = require('bcrypt-nodejs');
 import { SchemaLike } from 'joi';
 import Joi = require('joi');
 import { differenceInHours } from 'date-fns';
+import { IUserDto } from '../../../data/dto/user.dto';
 
 const userHelperErrorTexts = {
     NO_USER_FOUND_BY_ID: (userId: string) => `No User found by id: ${userId}`,
@@ -44,6 +45,7 @@ export class UsersHelper {
         );
     }
 
+    // noinspection JSUnusedGlobalSymbols
     public static getUserLocalProfile(email: string): Observable<IUserLocalProfile> {
         return UsersHelper.getUserByEmail(email).pipe(
             map((user: IUser) => user.profile.local),
@@ -55,7 +57,7 @@ export class UsersHelper {
             .pipe(take(1));
     }
 
-    public static addUserByLocalProfile(localProfile: IUserLocalProfile): Observable<IUser> {
+    public static addUserByLocalProfile(localProfile: IUserDto): Observable<IUser> {
         const activationToken = UsersHelper.generateToken();
 
         const profile: IUserLocalProfile = {
@@ -82,7 +84,8 @@ export class UsersHelper {
             .pipe(take(1));
     }
 
-    public static updateUser(userId: string, localProfile: IUserLocalProfile): Observable<IUser> {
+    // noinspection JSUnusedGlobalSymbols
+    public static updateUser(userId: string, localProfile: IUserDto): Observable<IUser> {
         return UsersHelper.getUserById(userId)
             .pipe(
                 switchMap((user: IUser) => {
@@ -105,6 +108,7 @@ export class UsersHelper {
             );
     }
 
+    // noinspection JSUnusedGlobalSymbols
     public static refreshActivationToken(userId: string): Observable<IUser> {
         return UsersHelper.getUserById(userId)
             .pipe(
@@ -207,6 +211,7 @@ export class UsersHelper {
             );
     }
 
+    // noinspection JSUnusedGlobalSymbols
     public static removeUser(id: string): Observable<IUser> {
         return fromPromise(UserModel.findOneAndRemove({_id: id}).exec())
             .pipe(take(1));

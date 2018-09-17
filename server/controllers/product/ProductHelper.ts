@@ -1,9 +1,10 @@
 import { Observable } from 'rxjs';
-import { IProduct, IProductData, ProductModel } from '../../database/models/product';
+import { IProduct, ProductModel } from '../../database/models/product';
 import { fromPromise } from 'rxjs/internal-compatibility';
 import { switchMap, take } from 'rxjs/operators';
 import { throwError } from 'rxjs/internal/observable/throwError';
 import { array, forbidden, SchemaLike, string } from 'joi';
+import { IProductDto } from '../../../data/dto/product.dto';
 
 export class ProductHelper {
     public static makeFindById(id: string): Observable<IProduct> {
@@ -16,7 +17,7 @@ export class ProductHelper {
             .pipe(take(1));
     }
 
-    public static makeCreate(categoryId: string, userId: string, productData: IProductData): Observable<IProduct> {
+    public static makeCreate(categoryId: string, userId: string, productData: IProductDto): Observable<IProduct> {
         productData.categories = categoryId ? [categoryId] : [];
         productData.userId = userId;
 
@@ -24,19 +25,19 @@ export class ProductHelper {
             .pipe(take(1));
     }
 
-    public static makeUpdate(id: string, productData: Partial<IProductData>): Observable<IProduct> {
+    public static makeUpdate(id: string, productData: Partial<IProductDto>): Observable<IProduct> {
         return ProductHelper.makeFindById(id)
             .pipe(
                 switchMap((product) => {
                     if (!product) {
-                        return throwError(new Error(`No Category by id: ${id}`));
+                        return throwError(new Error(`No Product by id: ${id}`));
                     }
 
                     Object.keys(productData).forEach((key) =>
                         // @ts-ignore
                         product[key] = productData[key] || product[key]);
 
-                    return fromPromise<IProduct>(product.save());
+                    return fromPromise(product.save());
                 }),
                 take(1),
             );

@@ -10,6 +10,7 @@ import { IAppRequest } from './interfaces/AppRequest';
 import { NextFunction, Response } from 'express';
 import { Server } from 'http';
 import { ControllerHelper } from './controllers/_helper/ControllerHelper';
+import fileUpload = require('express-fileupload');
 
 const app = express();
 
@@ -27,12 +28,16 @@ function initExpress() {
     if (config.isDevLocal) {
         app.use(morgan('dev'));
     } // log requests
-
+    app.use(fileUpload({
+        safeFileNames: true,
+        preserveExtension: true,
+    }));
     app.use(bodyParserJsonWrapper); // get information from html forms
     app.use(bodyParser.text()); // get information from html forms
     app.use(bodyParser.urlencoded({extended: true}));
 
     app.use('/', express.static(pathHelper.getClientRelative('/')));
+    app.use('/public', express.static(pathHelper.getDataRelative('/public')));
 
     app.use(cors());
 

@@ -110,7 +110,7 @@ export class ControllerHelper {
         });
     }
 
-    public loadSchema<T>(data: T, schema: SchemaLike): T {
+    public validateDataBySchema<T>(data: T, schema: SchemaLike): T {
         const validationOptions: ValidationOptions = {
             stripUnknown: true,
         };

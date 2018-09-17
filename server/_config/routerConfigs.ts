@@ -3,6 +3,7 @@ import { CategoriesController } from '../controllers/categories/categoriesContro
 import { IRouterHelperConfig } from '../interfaces/RouterHelperConfig';
 import { ControllerAction } from '../interfaces/ControllerAction';
 import { ProductController } from '../controllers/product/productController';
+import { ProductImageController } from '../controllers/product_image/productImageController';
 
 enum RouteMethods {
     get = 'get',
@@ -45,6 +46,13 @@ export const RouteConfigs: Record<string, IRouteConfig[]> = {
             method: RouteMethods.get,
             action: ProductController.get,
             options: {auth: false},
+        },
+    ],
+    productImageApi: [
+        {
+            url: '/api/product_images/:id',
+            method: RouteMethods.get,
+            action: ProductImageController.get,
         },
     ],
     usersApi: [
@@ -151,6 +159,23 @@ export const RouteConfigs: Record<string, IRouteConfig[]> = {
             url: '/api/products/:id',
             method: RouteMethods.delete,
             action: ProductController.delete,
+        },
+    ],
+    admin_product_images: [
+        {
+            url: '/api/product_images',
+            method: RouteMethods.post,
+            action: ProductImageController.post,
+        },
+        {
+            url: '/api/product_images/:id',
+            method: RouteMethods.put,
+            action: ProductImageController.put,
+        },
+        {
+            url: '/api/product_images/:id',
+            method: RouteMethods.delete,
+            action: ProductImageController.delete,
         },
     ],
 };

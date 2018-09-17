@@ -1,9 +1,10 @@
-import { CategoryModel, ICategory, ICategoryData } from '../../database/models/category';
+import { CategoryModel, ICategory } from '../../database/models/category';
 import { Observable } from 'rxjs/internal/Observable';
 import { fromPromise } from 'rxjs/internal-compatibility';
 import { switchMap, take } from 'rxjs/operators';
 import { throwError } from 'rxjs/internal/observable/throwError';
 import { string, SchemaLike, forbidden } from 'joi';
+import { ICategoryDto } from '../../../data/dto/category.dto';
 
 export class CategoriesHelper {
     public static makeFindById(id: string): Observable<ICategory> {
@@ -16,14 +17,14 @@ export class CategoriesHelper {
             .pipe(take(1));
     }
 
-    public static makeCreate(userId: string, categoryData: ICategoryData): Observable<ICategory> {
+    public static makeCreate(userId: string, categoryData: ICategoryDto): Observable<ICategory> {
         categoryData.userId = userId;
 
         return fromPromise(CategoryModel.create(categoryData))
             .pipe(take(1));
     }
 
-    public static makeUpdate(id: string, categoryData: Partial<ICategoryData>): Observable<ICategory> {
+    public static makeUpdate(id: string, categoryData: Partial<ICategoryDto>): Observable<ICategory> {
         return CategoriesHelper.makeFindById(id)
             .pipe(
                 switchMap((category) => {

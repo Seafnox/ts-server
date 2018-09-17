@@ -4,6 +4,7 @@ import { ModelNames } from '../modelNames.enum';
 export interface IProduct extends mongoose.Document, IProductData {}
 
 export interface IProductData {
+    _id: any;
     name: string;
     title: string;
     categories: string[];
