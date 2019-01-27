@@ -1,0 +1,42 @@
+{
+  "name": "ts-server",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "npm run tsc",
+    "coverage": "npm run test-cov && npm run test-remap",
+    "postinstall": "npm run build",
+    "tslint": "tslint ./*.ts ./lib/*.ts",
+    "test": "mocha --reporter spec --check-leaks --bail test/",
+    "tsc": "tsc --project tsconfig.json",
+    "tsc:w": "tsc -w",
+    "start": "nodemon --watch '**/*.ts' --ignore 'node_modules/**/*' --exec ts-node server.ts"
+  },
+  "dependencies": {
+    "@tsed/common": "^5.1.1",
+    "@tsed/core": "^5.1.1",
+    "@tsed/di": "^5.1.1",
+    "@tsed/swagger": "^5.1.1",
+    "@types/swagger-schema-official": "^2.0.14",
+    "body-parser": "^1.18.3",
+    "compression": "^1.7.3",
+    "cookie-parser": "^1.4.3",
+    "debug": "~2.6.9",
+    "express": "~4.16.0",
+    "method-override": "^3.0.0",
+    "morgan": "~1.9.0"
+  },
+  "devDependencies": {
+    "@types/body-parser": "^1.17.0",
+    "@types/compression": "0.0.36",
+    "@types/cookie-parser": "^1.4.1",
+    "@types/express": "^4.16.1",
+    "@types/method-override": "0.0.31",
+    "@types/morgan": "^1.7.35",
+    "mocha": "^5.2.0",
+    "nodemon": "^1.18.9",
+    "ts-node": "^8.0.2",
+    "tslint": "^5.12.1",
+    "typescript": "^3.2.4"
+  }
+}
