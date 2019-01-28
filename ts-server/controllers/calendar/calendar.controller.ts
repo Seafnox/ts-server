@@ -1,29 +1,34 @@
-import {Authenticated, BodyParams, Controller, Delete, Get, Post, QueryParams, Required} from "@tsed/common";
-import {CalendarDto} from "./calentar.dto";
+import { Authenticated, BodyParams, Controller, Delete, Get, PathParams, Post, Required } from '@tsed/common';
+import { CalendarDto } from './calentar.dto';
 
-@Controller("/calendars")
+@Controller('/calendars')
 export class CalendarController {
 
-    @Get("/")
-    async renderCalendars(): Promise<Array<CalendarDto>> {
-        return [{id: '1', name: "test"}];
+    @Get('/')
+    public async getCalendars(): Promise<CalendarDto[]> {
+        return [{ id: '1', name: 'test' }];
     }
 
-    @Post("/")
+    @Get('/:id')
+    public async getCalendar(@Required() @PathParams('id') id: string): Promise<CalendarDto> {
+        return { id, name: 'test' };
+    }
+
+    @Post('/')
     @Authenticated()
-    async post(
-        @Required() @QueryParams("calendar") calendar: CalendarDto
+    public async post(
+        @Required() @BodyParams('calendar') calendar: CalendarDto,
     ): Promise<CalendarDto> {
-        calendar.id = "1";
+        calendar.id = '1';
 
         return Promise.resolve(calendar);
     }
 
-    @Delete("/")
+    @Delete('/')
     @Authenticated()
-    async deleteItem(
-        @BodyParams("calendar.id") @Required() id: string
+    public async deleteItem(
+        @Required() @BodyParams('id') id: string,
     ): Promise<CalendarDto> {
-        return {id, name: "calendar"};
+        return { id, name: 'calendar' };
     }
 }

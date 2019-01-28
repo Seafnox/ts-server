@@ -1,45 +1,47 @@
-import {GlobalAcceptMimesMiddleware, ServerLoader, ServerSettings} from "@tsed/common";
-import * as cookieParser from 'cookie-parser';
+import { GlobalAcceptMimesMiddleware, ServerLoader, ServerSettings } from '@tsed/common';
+// import * as cookieParser from 'cookie-parser';
 import * as compression from 'compression';
-import * as methodOverride from 'method-override';
+// import * as methodOverride from 'method-override';
 import * as bodyParser from 'body-parser';
 import * as morgan from 'morgan';
+// import * as responseTime from "response-time";
+import '@tsed/swagger'; // import swagger Ts.ED module
 
 const rootDir = __dirname;
 
 @ServerSettings({
     rootDir,
-    acceptMimes: ["application/json"],
+    httpPort: 'localhost:8080',
+    httpsPort: 'localhost:8000',
+    uploadDir: `${rootDir}/uploads`,
+    acceptMimes: ['application/json'],
     swagger: [{
-        path: "/api-docs"
+        path: '/api-docs',
     }],
 })
 export class Server extends ServerLoader {
 
     /**
      * This method let you configure the express middleware required by your application to works.
-     * @returns {Server}
      */
-    public $onMountingMiddlewares(): void|Promise<null> {
+    public $onMountingMiddlewares(): void {
         this
             .use(GlobalAcceptMimesMiddleware)
+            // .use(responseTime())
             .use(morgan(':method :url :status :res[content-length] - :response-time ms'))
-            .use(cookieParser())
+            // .use(cookieParser())
             .use(compression({}))
-            .use(methodOverride())
+            // .use(methodOverride())
             .use(bodyParser.json())
             .use(bodyParser.urlencoded({
-                extended: true
+                extended: true,
             }));
 
         return null;
     }
 
-    public $onReady(){
-        console.log('Server started...');
-    }
-
-    public $onServerInitError(err: Error){
+    public $onServerInitError(err: Error): void {
+        // tslint:disable-next-line:no-console
         console.error(err);
     }
 }
