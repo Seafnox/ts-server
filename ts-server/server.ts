@@ -6,17 +6,23 @@ import * as bodyParser from 'body-parser';
 import * as morgan from 'morgan';
 // import * as responseTime from "response-time";
 import '@tsed/swagger'; // import swagger Ts.ED module
-
-const rootDir = __dirname;
+import 'reflect-metadata'; // import for typeORM
+import '@tsed/typeorm'; // import typeorm ts.ed module
 
 @ServerSettings({
-    rootDir,
+    rootDir: __dirname,
     httpPort: 'localhost:8080',
     httpsPort: 'localhost:8000',
-    uploadDir: `${rootDir}/uploads`,
+    uploadDir: `${__dirname}/uploads`,
     acceptMimes: ['application/json'],
     swagger: [{
         path: '/api-docs',
+    }],
+    typeorm: [{
+        name: 'default',
+        type: 'sqljs',
+        entities: [`${__dirname}/models/**/*.ts`],
+        synchronize: true,
     }],
 })
 export class Server extends ServerLoader {
