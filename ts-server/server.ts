@@ -13,7 +13,7 @@ import '@tsed/typeorm'; // import typeorm ts.ed module
     rootDir: __dirname,
     httpPort: 'localhost:8080',
     httpsPort: 'localhost:8000',
-    uploadDir: `${__dirname}/uploads`,
+    uploadDir: `./uploads`,
     acceptMimes: ['application/json'],
     swagger: [{
         path: '/api-docs',
@@ -21,7 +21,9 @@ import '@tsed/typeorm'; // import typeorm ts.ed module
     typeorm: [{
         name: 'default',
         type: 'sqljs',
-        entities: [`${__dirname}/models/**/*.ts`],
+        autoSave: true,
+        location: `./db/dump.sqlite`,
+        entities: [`./models/**/*.ts`],
         synchronize: true,
     }],
 })

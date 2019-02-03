@@ -2,6 +2,7 @@ import { Service, AfterRoutesInit } from '@tsed/common';
 import { TypeORMService } from '@tsed/typeorm';
 import { Connection } from 'typeorm';
 import { User } from '../../models/user/user';
+import { random } from 'faker';
 
 @Service()
 export class UsersService implements AfterRoutesInit {
@@ -11,21 +12,19 @@ export class UsersService implements AfterRoutesInit {
 
     public $afterRoutesInit(): void {
         this.connection = this.typeORMService.get();
-
-        const user = new User();
-        user.firstName = '123';
-        user.lastName = '234';
-        user.age = 1;
-
-        this.create(user);
+        this.newUser();
+        this.newUser();
+        this.newUser();
+        this.newUser();
+        this.newUser();
     }
 
     public async create(user: User): Promise<User> {
-        await this.connection.manager.save(user);
+        const result = await this.connection.manager.save(user);
         // tslint:disable-next-line:no-console
-        console.log(`Saved a new user with id: ${user.id}`);
+        console.log(`Saved a new user with id: ${result.id}`);
 
-        return user;
+        return result;
     }
 
     public async find(): Promise<User[]> {
@@ -34,6 +33,15 @@ export class UsersService implements AfterRoutesInit {
         console.log('Loaded users: ', users);
 
         return users;
+    }
+
+    private newUser(): Promise<User> {
+        const user = new User();
+        user.firstName = random.word();
+        user.lastName = random.word();
+        user.age = random.number();
+
+        return this.create(user);
     }
 
 }
