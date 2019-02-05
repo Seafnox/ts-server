@@ -36,3 +36,6 @@ ehthumbs_vista.db
 
 # Dump file
 *.stackdump
+
+# Project-specific stuff
+uploads
