@@ -1,6 +1,6 @@
 import { Service, AfterRoutesInit } from '@tsed/common';
 import { TypeORMService } from '@tsed/typeorm';
-import { Connection } from 'typeorm';
+import { Connection, EntityManager } from 'typeorm';
 import { User } from '../../models/user/user';
 import { random } from 'faker';
 
@@ -9,6 +9,10 @@ export class UsersService implements AfterRoutesInit {
     private connection: Connection;
 
     constructor(private typeORMService: TypeORMService) {}
+
+    public get manager(): EntityManager {
+        return this.connection.manager;
+    }
 
     public $afterRoutesInit(): void {
         this.connection = this.typeORMService.get();
@@ -20,7 +24,7 @@ export class UsersService implements AfterRoutesInit {
     }
 
     public async create(user: User): Promise<User> {
-        const result = await this.connection.manager.save(user);
+        const result = await this.manager.save(user);
         // tslint:disable-next-line:no-console
         console.log(`Saved a new user with id: ${result.id}`);
 
@@ -28,11 +32,20 @@ export class UsersService implements AfterRoutesInit {
     }
 
     public async find(): Promise<User[]> {
-        const users = await this.connection.manager.find(User);
+        const users = await this.manager.find(User);
         // tslint:disable-next-line:no-console
         console.log('Loaded users: ', users);
 
         return users;
+    }
+
+    public async findOne(id: number): Promise<User> {
+        const user = await this.manager.findOne(User, id);
+
+        // tslint:disable-next-line:no-console
+        console.log(`Find user by id '${id}': '${JSON.stringify(user)}'`);
+
+        return user;
     }
 
     private newUser(): Promise<User> {

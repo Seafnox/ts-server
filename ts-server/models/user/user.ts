@@ -25,4 +25,10 @@ export class User {
     @Minimum(0)
     @Maximum(maxAge)
     public age: number;
+
+    @Column({
+        default: '',
+    })
+    @MaxLength(maxStringLength)
+    public filePath: string;
 }
