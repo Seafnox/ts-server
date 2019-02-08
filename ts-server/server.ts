@@ -1,13 +1,12 @@
 import { GlobalAcceptMimesMiddleware, ServerLoader, ServerSettings } from '@tsed/common';
 // import * as cookieParser from 'cookie-parser';
 import * as compression from 'compression';
-// import * as methodOverride from 'method-override';
 import * as bodyParser from 'body-parser';
 import * as morgan from 'morgan';
-// import * as responseTime from "response-time";
 import '@tsed/swagger'; // import swagger Ts.ED module
 import 'reflect-metadata'; // import for typeORM
 import '@tsed/typeorm'; // import typeorm ts.ed module
+import { ImageHelper } from './helper/image/image.helper';
 
 @ServerSettings({
     rootDir: __dirname,
@@ -15,6 +14,9 @@ import '@tsed/typeorm'; // import typeorm ts.ed module
     httpsPort: 'localhost:8000',
     uploadDir: `./uploads`,
     acceptMimes: ['application/json'],
+    statics: {
+        [ImageHelper.staticFilePath]: ImageHelper.relativeFilePath,
+    },
     swagger: [{
         path: '/api-docs',
     }],

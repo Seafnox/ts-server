@@ -1,4 +1,4 @@
-import { Controller, Post, BodyParams, Get, Required, PathParams } from '@tsed/common';
+import { Controller, Post, BodyParams, Get, Required, PathParams, Delete } from '@tsed/common';
 import { MultipartFile } from '@tsed/multipartfiles';
 import { BadRequest } from 'ts-httpexceptions';
 import { ImageHelper } from '../../helper/image/image.helper';
@@ -9,7 +9,7 @@ import { UsersService } from '../../services/user/user.service';
 @Controller('/users')
 export class UsersController {
 
-    constructor(private usersService: UsersService) {}
+    constructor(private readonly usersService: UsersService) {}
 
     @Post('/')
     public create(@Required() @BodyParams() user: User): Promise<User> {
@@ -26,25 +26,26 @@ export class UsersController {
         @PathParams('id') id: string,
         @MultipartFile('file') file: File,
     ): Promise<User> {
-
-        // tslint:disable-next-line:no-console
-        console.log('file', file);
-
         if (!ImageHelper.isImage(file)) {
+            ImageHelper.deleteFile(file);
             throw(new BadRequest(`File could be only an image`));
         }
 
         const filePath = ImageHelper.saveFile(file);
-
-        // tslint:disable-next-line:no-console
-        console.log('filePath', filePath);
-
-        const user = await this.usersService.findOne(+id);
+        const user = await this.usersService.update(+id, {
+            filePath,
+        });
 
         if (!user) {
+            ImageHelper.deleteFileByPath(filePath);
             throw(new BadRequest(`Can't find user with id ${JSON.stringify(id)}`));
         }
 
         return user;
+    }
+
+    @Delete('/:id')
+    public async delete(@PathParams('id') id: string): Promise<User> {
+        return this.usersService.delete(+id);
     }
 }
