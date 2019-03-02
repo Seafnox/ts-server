@@ -1,18 +1,17 @@
 import { Service, AfterRoutesInit } from '@tsed/common';
 import { TypeORMService } from '@tsed/typeorm';
-import { EntityManager } from 'typeorm';
+import { Connection, EntityManager } from 'typeorm';
 import { ImageHelper } from '../../helper/image/image.helper';
 import { User } from '../../models/user/user';
 
 @Service()
 export class UsersService implements AfterRoutesInit {
-    private manager: EntityManager;
+    private connection: Connection;
 
     constructor(private readonly typeORMService: TypeORMService) {}
 
     public $afterRoutesInit(): void {
-        const connection = this.typeORMService.get();
-        this.manager = connection.manager;
+        this.connection = this.typeORMService.get();
     }
 
     public async create(user: User): Promise<User> {
@@ -40,5 +39,9 @@ export class UsersService implements AfterRoutesInit {
         ImageHelper.deleteFileByPath(user.filePath);
 
         return user;
+    }
+
+    private get manager(): EntityManager {
+        return this.connection.manager;
     }
 }
