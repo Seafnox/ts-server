@@ -1,4 +1,4 @@
-import { Controller, Post, BodyParams, Get, Required, PathParams, Delete } from '@tsed/common';
+import { Controller, Post, BodyParams, Get, Required, PathParams, Delete, Put, Header } from '@tsed/common';
 import { MultipartFile } from '@tsed/multipartfiles';
 import { BadRequest } from 'ts-httpexceptions';
 import { ImageHelper } from '../../helper/image/image.helper';
@@ -12,16 +12,28 @@ export class UsersController {
     constructor(private readonly usersService: UsersService) {}
 
     @Post('/')
+    @Header('Access-Control-Allow-Origin', '*')
     public create(@Required() @BodyParams() user: User): Promise<User> {
         return this.usersService.create(user);
     }
 
+    @Put('/:id')
+    @Header('Access-Control-Allow-Origin', '*')
+    public update(
+        @PathParams('id') id: string,
+        @Required() @BodyParams() user: User,
+    ): Promise<User> {
+        return this.usersService.update(+id, user);
+    }
+
     @Get('/')
+    @Header('Access-Control-Allow-Origin', '*')
     public getList(): Promise<User[]> {
         return this.usersService.find();
     }
 
     @Post('/:id/avatar')
+    @Header('Access-Control-Allow-Origin', '*')
     public async patchAvatar(
         @PathParams('id') id: string,
         @MultipartFile('file') file: File,
@@ -45,6 +57,7 @@ export class UsersController {
     }
 
     @Delete('/:id')
+    @Header('Access-Control-Allow-Origin', '*')
     public async delete(@PathParams('id') id: string): Promise<User> {
         return this.usersService.delete(+id);
     }
