@@ -1,10 +1,12 @@
-import { IMiddleware, Middleware, Response } from '@tsed/common';
+import { IMiddleware, Middleware, Request, Response } from '@tsed/common';
+// import * as core from 'express-serve-static-core';
 
 @Middleware()
 export class Cors implements IMiddleware {
     // tslint:disable-next-line:no-any
-    public use(@Response() res: any): void {
+    public use(@Request() req: any, @Response() res: any): void {
         res.header('Access-Control-Allow-Origin', '*');
         res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+        res.header('Access-Control-Allow-Methods', req.header('Access-Control-Request-Method'));
     }
 }
