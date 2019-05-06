@@ -3,6 +3,7 @@ import { TypeORMService } from '@tsed/typeorm';
 import { Connection, EntityManager } from 'typeorm';
 import { ImageHelper } from '../../helper/image/image.helper';
 import { User } from '../../models/user/user';
+import { CreateUser } from '../../models/user/create-user';
 
 @Service()
 export class UsersService implements AfterRoutesInit {
@@ -14,8 +15,8 @@ export class UsersService implements AfterRoutesInit {
         this.connection = this.typeORMService.get();
     }
 
-    public async create(user: User): Promise<User> {
-        return await this.manager.save(user);
+    public async create(user: CreateUser): Promise<User> {
+        return await this.manager.save(User.fromCreateUser(user));
     }
 
     public async find(): Promise<User[]> {

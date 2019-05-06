@@ -6,6 +6,9 @@ import { File } from '../../interfaces/file.interface';
 import { User } from '../../models/user/user';
 import { UsersService } from '../../services/user/user.service';
 import { Cors } from '../../middlewars/cors';
+import { SmallUser } from '../../models/user/small-user';
+import { CreateUser } from '../../models/user/create-user';
+import { UpdateUser } from '../../models/user/update-user';
 
 @Controller('/users')
 @UseBefore(Cors)
@@ -14,21 +17,30 @@ export class UsersController {
     constructor(private readonly usersService: UsersService) {}
 
     @Post('/')
-    public create(@Required() @BodyParams() user: User): Promise<User> {
+    public create(@Required() @BodyParams() user: CreateUser): Promise<User> {
         return this.usersService.create(user);
     }
 
     @Put('/:id')
     public update(
         @PathParams('id') id: string,
-        @Required() @BodyParams() user: User,
+        @Required() @BodyParams() user: UpdateUser,
     ): Promise<User> {
         return this.usersService.update(+id, user);
     }
 
     @Get('/')
-    public getList(): Promise<User[]> {
-        return this.usersService.find();
+    public async getList(): Promise<SmallUser[]> {
+        const users = await this.usersService.find();
+
+        return users.map(SmallUser.fromUser);
+    }
+
+    @Get('/:id')
+    public async getUser(
+        @PathParams('id') id: string,
+    ): Promise<User> {
+        return await this.usersService.findOne(+id);
     }
 
     @Post('/:id/avatar')

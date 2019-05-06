@@ -1,5 +1,6 @@
 import { Property, MaxLength, Required, Minimum, Maximum } from '@tsed/common';
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { CreateUser } from './create-user';
 
 const maxStringLength = 100;
 const maxAge = 100;
@@ -31,4 +32,14 @@ export class User {
     })
     @MaxLength(maxStringLength)
     public filePath: string;
+
+    public static fromCreateUser(user: CreateUser): User {
+        const result = new User();
+        const { firstName, lastName, age }: CreateUser = user;
+
+        Object.assign(result, { firstName, lastName, age });
+
+        return result;
+    }
+
 }
