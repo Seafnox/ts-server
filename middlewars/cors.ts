@@ -8,6 +8,7 @@ export class Cors implements IMiddleware {
         res.header('Access-Control-Allow-Origin', '*');
         if (req.header('Access-Control-Request-Method')) {
             res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+            res.header('Access-Control-Allow-Credentials', true);
             res.header('Access-Control-Allow-Methods', req.header('Access-Control-Request-Method'));
         }
     }
