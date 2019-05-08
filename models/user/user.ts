@@ -7,7 +7,6 @@ const maxAge = 100;
 
 @Entity()
 export class User {
-
     @PrimaryGeneratedColumn()
     @Property()
     public id: number;
@@ -41,5 +40,4 @@ export class User {
 
         return result;
     }
-
 }

@@ -13,7 +13,6 @@ import { UpdateUser } from '../../models/user/update-user';
 @Controller('/users')
 @UseBefore(Cors)
 export class UsersController {
-
     constructor(private readonly usersService: UsersService) {}
 
     @Post('/')
