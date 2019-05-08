@@ -43,23 +43,27 @@ export class UsersController {
         return await this.usersService.findOne(+id);
     }
 
-    @Post('/:id/avatar')
+    @Put('/:id/avatar')
     public async patchAvatar(
         @PathParams('id') id: string,
         @MultipartFile('file') file: File,
     ): Promise<User> {
-        if (!ImageHelper.isImage(file)) {
+        if (file && !ImageHelper.isImage(file)) {
             ImageHelper.deleteFile(file);
+
             throw(new BadRequest(`File could be only an image`));
         }
 
-        const filePath = ImageHelper.saveFile(file);
+        const filePath = file ? ImageHelper.saveFile(file) : '';
         const user = await this.usersService.update(+id, {
             filePath,
         });
 
         if (!user) {
-            ImageHelper.deleteFileByPath(filePath);
+            if (filePath) {
+                ImageHelper.deleteFileByPath(filePath);
+            }
+
             throw(new BadRequest(`Can't find user with id ${JSON.stringify(id)}`));
         }
 
