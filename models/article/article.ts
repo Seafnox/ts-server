@@ -31,7 +31,7 @@ export class Article {
     public description: string;
 
 
-    public static fromCreatePost(post: CreateArticle): Article {
+    public static fromCreateArticle(post: CreateArticle): Article {
         const result = new Article();
         const { name, sortDescription, description }: CreateArticle = post;
 

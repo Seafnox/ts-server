@@ -1,6 +1,6 @@
 import { BodyParams, Controller, Delete, Get, PathParams, Post, Put, Required, UseBefore } from '@tsed/common';
 import { Cors } from '../../middlewars/cors';
-import { ArticlesService } from '../../services/article/article.service';
+import { ArticlesService } from '../../services/article/articles.service';
 import { Article } from '../../models/article/article';
 import { CreateArticle } from '../../models/article/create-article';
 import { UpdateArticle } from '../../models/article/update-article';
@@ -73,5 +73,4 @@ export class ArticleController {
     public async delete(@PathParams('id') id: string): Promise<Article> {
         return this.articlesService.delete(+id);
     }
-
 }

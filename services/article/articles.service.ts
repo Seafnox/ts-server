@@ -16,7 +16,7 @@ export class ArticlesService implements AfterRoutesInit {
     }
 
     public async create(article: CreateArticle): Promise<Article> {
-        return await this.manager.save(Article.fromCreatePost(article));
+        return await this.manager.save(Article.fromCreateArticle(article));
     }
 
     public async find(): Promise<Article[]> {

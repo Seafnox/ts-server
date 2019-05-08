@@ -4,7 +4,7 @@ import { BadRequest } from 'ts-httpexceptions';
 import { ImageHelper } from '../../helper/image/image.helper';
 import { File } from '../../interfaces/file.interface';
 import { User } from '../../models/user/user';
-import { UsersService } from '../../services/user/user.service';
+import { UsersService } from '../../services/user/users.service';
 import { Cors } from '../../middlewars/cors';
 import { SmallUser } from '../../models/user/small-user';
 import { CreateUser } from '../../models/user/create-user';
