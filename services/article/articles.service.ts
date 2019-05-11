@@ -15,8 +15,8 @@ export class ArticlesService implements AfterRoutesInit {
         this.connection = this.typeORMService.get();
     }
 
-    public async create(article: CreateArticle): Promise<Article> {
-        return await this.manager.save(Article.fromCreateArticle(article));
+    public async create(data: CreateArticle): Promise<Article> {
+        return await this.manager.save(Article.fromCreateArticle(data));
     }
 
     public async find(): Promise<Article[]> {
@@ -27,19 +27,19 @@ export class ArticlesService implements AfterRoutesInit {
         return await this.manager.findOne(Article, id);
     }
 
-    public async update(id: number, articleData: Partial<Article>): Promise<Article> {
-        await this.manager.update(Article, id, articleData);
+    public async update(id: number, data: Partial<Article>): Promise<Article> {
+        await this.manager.update(Article, id, data);
 
         return await this.findOne(id);
     }
 
     public async delete(id: number): Promise<Article> {
-        const article = await this.findOne(id);
+        const entity = await this.findOne(id);
 
         await this.manager.delete(Article, id);
-        ImageHelper.deleteFileByPath(article.preview);
+        ImageHelper.deleteFileByPath(entity.preview);
 
-        return article;
+        return entity;
     }
 
     private get manager(): EntityManager {
