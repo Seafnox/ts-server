@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@tsed/common": "^5.1.1",
-    "@tsed/core": "^5.1.1",
+    "@tsed/core": "^5.65.7",
     "@tsed/di": "^5.1.1",
     "@tsed/multipartfiles": "^5.1.1",
     "@tsed/swagger": "^5.1.1",
