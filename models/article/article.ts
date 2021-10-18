@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { MaxLength, MinLength, Property, Required } from '@tsed/common';
+import { MaxLength, MinLength, Property, Required } from '@tsed/schema';
 import { CreateArticle } from './create-article';
 
 const maxNameLength = 50;

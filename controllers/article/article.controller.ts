@@ -1,17 +1,15 @@
-import { BodyParams, Controller, Delete, Get, PathParams, Post, Put, Required, UseBefore } from '@tsed/common';
-import { Cors } from '../../middlewars/cors';
+import { BodyParams, Controller, Delete, Get, PathParams, Post, Put, MultipartFile } from '@tsed/common';
+import { Required } from '@tsed/schema';
 import { ArticlesService } from '../../services/article/articles.service';
 import { Article } from '../../models/article/article';
 import { CreateArticle } from '../../models/article/create-article';
 import { UpdateArticle } from '../../models/article/update-article';
 import { SmallArticle } from '../../models/article/small-article';
-import { MultipartFile } from '@tsed/multipartfiles';
-import { File } from '../../interfaces/file.interface';
+import { File } from '../../interfaces/file';
 import { ImageHelper } from '../../helper/image/image.helper';
 import { BadRequest } from 'ts-httpexceptions';
 
 @Controller('/articles')
-@UseBefore(Cors)
 export class ArticleController {
     constructor(private readonly articlesService: ArticlesService) {}
 

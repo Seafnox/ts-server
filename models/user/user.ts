@@ -1,4 +1,4 @@
-import { Property, MaxLength, Required, Minimum, Maximum } from '@tsed/common';
+import { Property, MaxLength, Required, Minimum, Maximum } from '@tsed/schema';
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 import { CreateUser } from './create-user';
 

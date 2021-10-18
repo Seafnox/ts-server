@@ -1,5 +1,5 @@
 import { Article } from './article';
-import { Property } from '@tsed/common';
+import { Property } from '@tsed/schema';
 
 export class SmallArticle implements Article {
     @Property()

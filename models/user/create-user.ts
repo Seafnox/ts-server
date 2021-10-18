@@ -1,5 +1,5 @@
 import { User } from './user';
-import { Property, Required } from '@tsed/common';
+import { Property, Required } from '@tsed/schema';
 
 export class CreateUser implements User {
     @Property()

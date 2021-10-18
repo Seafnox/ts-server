@@ -1,5 +1,5 @@
 import { Article } from './article';
-import { Property } from '@tsed/common';
+import { Property } from '@tsed/schema';
 
 export class UpdateArticle implements Article {
     public id: number;

@@ -1,5 +1,5 @@
 import { User } from './user';
-import { Property } from '@tsed/common';
+import { Property } from '@tsed/schema';
 
 export class UpdateUser implements User {
     @Property()

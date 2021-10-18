@@ -1,17 +1,15 @@
-import { Controller, Post, BodyParams, Get, Required, PathParams, Delete, Put, UseBefore } from '@tsed/common';
-import { MultipartFile } from '@tsed/multipartfiles';
+import { Controller, Post, BodyParams, Get, PathParams, Delete, Put, MultipartFile } from '@tsed/common';
+import { Required } from '@tsed/schema';
 import { BadRequest } from 'ts-httpexceptions';
 import { ImageHelper } from '../../helper/image/image.helper';
-import { File } from '../../interfaces/file.interface';
+import { File } from '../../interfaces/file';
 import { User } from '../../models/user/user';
 import { UsersService } from '../../services/user/users.service';
-import { Cors } from '../../middlewars/cors';
 import { SmallUser } from '../../models/user/small-user';
 import { CreateUser } from '../../models/user/create-user';
 import { UpdateUser } from '../../models/user/update-user';
 
 @Controller('/users')
-@UseBefore(Cors)
 export class UsersController {
     constructor(private readonly usersService: UsersService) {}
 

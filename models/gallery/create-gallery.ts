@@ -1,5 +1,5 @@
 import { Gallery } from './gallery';
-import { Property } from '@tsed/common';
+import { Property } from '@tsed/schema';
 import { GalleryItem } from '../gallery-item/gallery-item';
 
 export class CreateGallery implements Gallery {

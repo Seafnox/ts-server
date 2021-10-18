@@ -2,7 +2,7 @@ import slugify from 'slugify';
 import * as unusedFilename from 'unused-filename';
 import * as fs from 'fs';
 import * as path from 'path';
-import { File } from '../../interfaces/file.interface';
+import { File } from '../../interfaces/file';
 
 export class ImageHelper {
     public static readonly staticFilePath = '/public';

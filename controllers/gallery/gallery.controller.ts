@@ -1,9 +1,5 @@
-import { BodyParams, Controller, Delete, Get, PathParams, Post, Put, Required, UseBefore } from '@tsed/common';
-import { Cors } from '../../middlewars/cors';
-// import { MultipartFile } from '@tsed/multipartfiles';
-// import { File } from '../../interfaces/file.interface';
-// import { ImageHelper } from '../../helper/image/image.helper';
-// import { BadRequest } from 'ts-httpexceptions';
+import { BodyParams, Controller, Delete, Get, PathParams, Post, Put } from '@tsed/common';
+import { Required } from '@tsed/schema';
 import { GalleriesService } from '../../services/gallery/galleries.service';
 import { CreateGallery } from '../../models/gallery/create-gallery';
 import { Gallery } from '../../models/gallery/gallery';
@@ -13,7 +9,6 @@ import { SmallGallery } from '../../models/gallery/small-gallery';
 // const maxFileCount = 5;
 
 @Controller('/galleries')
-@UseBefore(Cors)
 export class GalleryController {
     constructor(private readonly galleriesService: GalleriesService) {}
 

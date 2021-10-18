@@ -1,5 +1,5 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { MaxLength, MinLength, Property, Required } from '@tsed/common';
+import { MaxLength, MinLength, Property, Required } from '@tsed/schema';
 import { CreateGallery } from './create-gallery';
 import { GalleryItem } from '../gallery-item/gallery-item';
 
