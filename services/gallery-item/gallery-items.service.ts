@@ -29,23 +29,23 @@ export class GalleryItemsService {
         return await this.repo.find();
     }
 
-    public async findOne(id: number): Promise<Gallery> {
+    public async findOne(id: number): Promise<Gallery | undefined> {
         return await this.repo.findOne(id, {
             relations: ['items'],
         });
     }
 
-    public async update(id: number, galleryData: Partial<Gallery>): Promise<Gallery> {
+    public async update(id: number, galleryData: Partial<Gallery>): Promise<Gallery | undefined> {
         await this.manager.update(Gallery, id, galleryData);
 
         return await this.findOne(id);
     }
 
-    public async delete(id: number): Promise<Gallery> {
+    public async delete(id: number): Promise<Gallery | undefined> {
         const gallery = await this.findOne(id);
 
         await this.manager.delete(Gallery, id);
-        gallery.items.forEach((item): void => ImageHelper.deleteFileByPath(item.path));
+        gallery?.items.forEach((item): void => ImageHelper.deleteFileByPath(item.path));
 
         return gallery;
     }

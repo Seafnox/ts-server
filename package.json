@@ -5,7 +5,7 @@
     "scripts": {
         "build": "npm run tsc",
         "coverage": "npm run test-cov && npm run test-remap",
-        "generate:certs": "ts-node server/generate-cert.js",
+        "generate:certs": "node server/generate-cert.js",
         "tslint": "tslint -p tsconfig.json",
         "tslint:fix": "tslint -p tsconfig.json --fix",
         "test": "mocha --reporter spec --check-leaks --bail test/",

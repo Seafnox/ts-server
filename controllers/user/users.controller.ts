@@ -22,7 +22,7 @@ export class UsersController {
     public update(
         @PathParams('id') id: string,
         @Required() @BodyParams() user: UpdateUser,
-    ): Promise<User> {
+    ): Promise<User | undefined> {
         return this.usersService.update(+id, user);
     }
 
@@ -36,7 +36,7 @@ export class UsersController {
     @Get('/:id')
     public async getUser(
         @PathParams('id') id: string,
-    ): Promise<User> {
+    ): Promise<User | undefined> {
         return await this.usersService.findOne(+id);
     }
 
@@ -68,7 +68,7 @@ export class UsersController {
     }
 
     @Delete('/:id')
-    public async delete(@PathParams('id') id: string): Promise<User> {
+    public async delete(@PathParams('id') id: string): Promise<User | undefined> {
         return this.usersService.delete(+id);
     }
 }

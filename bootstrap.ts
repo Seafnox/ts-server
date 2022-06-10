@@ -2,7 +2,7 @@ import { $log } from '@tsed/common';
 import { PlatformExpress } from '@tsed/platform-express';
 import { readFileSync } from 'fs';
 import { ServerOptions } from 'https';
-import * as path from 'path';
+import path from 'path';
 import { ImageHelper } from './helper/image/image.helper';
 import { Server } from './server/server';
 

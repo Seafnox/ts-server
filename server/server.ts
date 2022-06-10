@@ -1,8 +1,8 @@
 import { PlatformAcceptMimesMiddleware, Configuration } from '@tsed/common';
-import * as compression from 'compression';
+import compression from 'compression';
 import * as bodyParser from 'body-parser';
-import * as morgan from 'morgan';
-import * as cors from 'cors';
+import morgan from 'morgan';
+import cors from 'cors';
 // import * as cookieParser from 'cookie-parser';
 import '@tsed/swagger'; // import swagger Ts.ED module
 import 'reflect-metadata'; // import for typeORM

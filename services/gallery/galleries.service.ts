@@ -31,23 +31,23 @@ export class GalleriesService implements AfterRoutesInit {
         return await this.repo.find();
     }
 
-    public async findOne(id: number): Promise<Gallery> {
+    public async findOne(id: number): Promise<Gallery | undefined> {
         return await this.repo.findOne(id, {
             relations: ['items'],
         });
     }
 
-    public async update(id: number, data: Partial<Gallery>): Promise<Gallery> {
+    public async update(id: number, data: Partial<Gallery>): Promise<Gallery | undefined> {
         await this.manager.update(Gallery, id, data);
 
         return await this.findOne(id);
     }
 
-    public async delete(id: number): Promise<Gallery> {
+    public async delete(id: number): Promise<Gallery | undefined> {
         const entity = await this.findOne(id);
 
         await this.manager.delete(Gallery, id);
-        entity.items.forEach((item): void => ImageHelper.deleteFileByPath(item.path));
+        entity?.items.forEach((item): void => ImageHelper.deleteFileByPath(item.path));
 
         return entity;
     }

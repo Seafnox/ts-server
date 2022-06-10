@@ -1,6 +1,6 @@
-import { writeFileSync, mkdirSync, existsSync } from 'fs';
-import * as path from 'path';
-import { createCertificate, config } from 'pem';
+const { writeFileSync, mkdirSync, existsSync } = require('fs');
+const path = require('path');
+const { createCertificate, config } = require('pem');
 
 config({
     pathOpenSSL: 'C:\\Program Files\\Git\\usr\\bin\\openssl.exe'

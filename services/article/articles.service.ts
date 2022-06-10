@@ -27,21 +27,23 @@ export class ArticlesService implements AfterRoutesInit {
         return await this.manager.find(Article);
     }
 
-    public async findOne(id: number): Promise<Article> {
+    public async findOne(id: number): Promise<Article | undefined> {
         return await this.manager.findOne(Article, id);
     }
 
-    public async update(id: number, data: Partial<Article>): Promise<Article> {
+    public async update(id: number, data: Partial<Article>): Promise<Article | undefined> {
         await this.manager.update(Article, id, data);
 
         return await this.findOne(id);
     }
 
-    public async delete(id: number): Promise<Article> {
+    public async delete(id: number): Promise<undefined | Article> {
         const entity = await this.findOne(id);
 
         await this.manager.delete(Article, id);
-        ImageHelper.deleteFileByPath(entity.preview);
+        if (entity) {
+            ImageHelper.deleteFileByPath(entity.preview);
+        }
 
         return entity;
     }

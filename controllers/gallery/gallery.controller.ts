@@ -21,7 +21,7 @@ export class GalleryController {
     public update(
         @PathParams('id') id: string,
         @Required() @BodyParams() gallery: UpdateGallery,
-    ): Promise<Gallery> {
+    ): Promise<Gallery | undefined> {
         return this.galleriesService.update(+id, gallery);
     }
 
@@ -35,7 +35,7 @@ export class GalleryController {
     @Get('/:id')
     public async getGallery(
         @PathParams('id') id: string,
-    ): Promise<Gallery> {
+    ): Promise<Gallery | undefined> {
         return await this.galleriesService.findOne(+id);
     }
 
@@ -71,7 +71,7 @@ export class GalleryController {
     // }
 
     @Delete('/:id')
-    public async delete(@PathParams('id') id: string): Promise<Gallery> {
+    public async delete(@PathParams('id') id: string): Promise<Gallery | undefined> {
         return this.galleriesService.delete(+id);
     }
 }

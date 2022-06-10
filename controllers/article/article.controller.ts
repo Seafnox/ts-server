@@ -22,7 +22,7 @@ export class ArticleController {
     public update(
         @PathParams('id') id: string,
         @Required() @BodyParams() article: UpdateArticle,
-    ): Promise<Article> {
+    ): Promise<Article | undefined> {
         return this.articlesService.update(+id, article);
     }
 
@@ -36,7 +36,7 @@ export class ArticleController {
     @Get('/:id')
     public async getArticle(
         @PathParams('id') id: string,
-    ): Promise<Article> {
+    ): Promise<Article | undefined> {
         return await this.articlesService.findOne(+id);
     }
 
@@ -68,7 +68,7 @@ export class ArticleController {
     }
 
     @Delete('/:id')
-    public async delete(@PathParams('id') id: string): Promise<Article> {
+    public async delete(@PathParams('id') id: string): Promise<Article | undefined> {
         return this.articlesService.delete(+id);
     }
 }
