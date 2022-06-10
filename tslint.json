@@ -11,6 +11,7 @@
     },
     "rules": {
         "arrow-parens": true,
+        "block-spacing": [true, "never"],
         "ter-arrow-parens": false,
         "deprecation": {
             "severity": "warn"
@@ -53,7 +54,8 @@
         "indent": false,
         "ter-indent": [
             true,
-            4
+            4,
+            { "SwitchCase": 1 }
         ],
         "no-magic-numbers": [
             true,

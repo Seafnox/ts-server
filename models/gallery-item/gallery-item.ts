@@ -1,3 +1,4 @@
+import { Type } from '@tsed/core';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Property, Required } from '@tsed/schema';
 import { Gallery } from '../gallery/gallery';
@@ -12,7 +13,7 @@ export class GalleryItem {
     @Required()
     public path: string;
 
-    @ManyToOne(() => Gallery, (gallery) => gallery.items)
+    @ManyToOne((): Type => Gallery, (gallery): GalleryItem[] => gallery.items)
     @Required()
     public gallery: Gallery;
 

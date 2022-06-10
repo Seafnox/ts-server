@@ -9,6 +9,14 @@ export class GalleryItemsService {
 
     constructor(private readonly typeORMService: TypeORMService) {}
 
+    private get manager(): EntityManager {
+        return this.connection.manager;
+    }
+
+    private get repo(): Repository<Gallery> {
+        return this.connection.getRepository(Gallery);
+    }
+
     public $afterRoutesInit(): void {
         this.connection = this.typeORMService.get();
     }
@@ -37,16 +45,8 @@ export class GalleryItemsService {
         const gallery = await this.findOne(id);
 
         await this.manager.delete(Gallery, id);
-        gallery.items.forEach((item) => ImageHelper.deleteFileByPath(item.path));
+        gallery.items.forEach((item): void => ImageHelper.deleteFileByPath(item.path));
 
         return gallery;
-    }
-
-    private get manager(): EntityManager {
-        return this.connection.manager;
-    }
-
-    private get repo(): Repository<Gallery> {
-        return this.connection.getRepository(Gallery);
     }
 }

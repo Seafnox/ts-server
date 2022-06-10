@@ -3,16 +3,16 @@ import * as path from 'path';
 import { createCertificate, config } from 'pem';
 
 config({
-    pathOpenSSL: "C:\\Program Files\\Git\\usr\\bin\\openssl.exe"
+    pathOpenSSL: 'C:\\Program Files\\Git\\usr\\bin\\openssl.exe'
 });
 
 createCertificate({ selfSigned: true }, function (err, keys) {
     if (err) {
-        throw err
+        throw err;
     }
 
     const { csr, clientKey, serviceKey, certificate } = keys;
-    const certPath = path.join(__filename, "../certificates");
+    const certPath = path.join(__filename, '../certificates');
 
     console.log('GENERATED');
     console.log(__filename);

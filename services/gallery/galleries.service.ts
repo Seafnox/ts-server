@@ -11,6 +11,14 @@ export class GalleriesService implements AfterRoutesInit {
 
     constructor(private readonly typeORMService: TypeORMService) {}
 
+    private get manager(): EntityManager {
+        return this.connection.manager;
+    }
+
+    private get repo(): Repository<Gallery> {
+        return this.connection.getRepository(Gallery);
+    }
+
     public $afterRoutesInit(): void {
         this.connection = this.typeORMService.get();
     }
@@ -39,16 +47,8 @@ export class GalleriesService implements AfterRoutesInit {
         const entity = await this.findOne(id);
 
         await this.manager.delete(Gallery, id);
-        entity.items.forEach((item) => ImageHelper.deleteFileByPath(item.path));
+        entity.items.forEach((item): void => ImageHelper.deleteFileByPath(item.path));
 
         return entity;
-    }
-
-    private get manager(): EntityManager {
-        return this.connection.manager;
-    }
-
-    private get repo(): Repository<Gallery> {
-        return this.connection.getRepository(Gallery);
     }
 }

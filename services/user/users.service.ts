@@ -11,6 +11,10 @@ export class UsersService implements AfterRoutesInit {
 
     constructor(private readonly typeORMService: TypeORMService) {}
 
+    private get manager(): EntityManager {
+        return this.connection.manager;
+    }
+
     public $afterRoutesInit(): void {
         this.connection = this.typeORMService.get();
     }
@@ -40,9 +44,5 @@ export class UsersService implements AfterRoutesInit {
         ImageHelper.deleteFileByPath(entity.filePath);
 
         return entity;
-    }
-
-    private get manager(): EntityManager {
-        return this.connection.manager;
     }
 }

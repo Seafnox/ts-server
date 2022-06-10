@@ -1,11 +1,15 @@
 import slugify from 'slugify';
-import * as unusedFilename from 'unused-filename';
 import * as fs from 'fs';
 import * as path from 'path';
+import { unusedFilenameSync } from 'unused-filename';
 import { File } from '../../interfaces/file';
 
 export class ImageHelper {
     public static readonly staticFilePath = '/public';
+
+    public static get relativeFilePath(): string {
+        return `.${ImageHelper.staticFilePath}`;
+    }
 
     public static saveFile(file: File): string {
         ImageHelper.makeSureStaticFilePathExist();
@@ -32,17 +36,12 @@ export class ImageHelper {
     public static getCustomFileName(file: File): string {
         const fileName = `${ImageHelper.fileNameSeed()} ${file.originalname}`;
 
-        return unusedFilename
-            .sync(path.join(ImageHelper.relativeFilePath, slugify(fileName)))
+        return unusedFilenameSync(path.join(ImageHelper.relativeFilePath, slugify(fileName)))
             .replace(`\\`, `/`);
     }
 
     public static isImage(file: File): boolean {
         return file.mimetype.startsWith('image');
-    }
-
-    public static get relativeFilePath(): string {
-        return `.${ImageHelper.staticFilePath}`;
     }
 
     private static fileNameSeed(): string {

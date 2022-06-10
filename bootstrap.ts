@@ -9,14 +9,14 @@ import { Server } from './server/server';
 async function bootstrap(): Promise<void> {
     try {
         $log.debug('Start server...');
-        const certPath = path.join(__dirname, "server", "certificates");
+        const certPath = path.join(__dirname, 'server', 'certificates');
         const platform = await PlatformExpress.bootstrap(Server, {
             rootDir: __dirname,
             // httpPort: 'localhost:8080',
             httpsPort: 'localhost:8000',
             httpsOptions: {
-                key: readFileSync(path.join(certPath, "clientKey.pem")),
-                cert: readFileSync(path.join(certPath, "certificate.pem")),
+                key: readFileSync(path.join(certPath, 'clientKey.pem')),
+                cert: readFileSync(path.join(certPath, 'certificate.pem')),
             } as ServerOptions,
             uploadDir: `./uploads`,
             acceptMimes: ['application/json'],

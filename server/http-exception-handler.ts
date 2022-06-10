@@ -34,19 +34,21 @@ export class HttpExceptionFilter implements ExceptionFilterMethods {
     protected getErrors(error: Exception): Error[] {
         return [error, error.origin]
             .filter(Boolean)
-            .reduce((errs, { errors }: ResponseErrorObject) => {
-                return [...errs, ...(errors || [])];
-            }, []);
+            .reduce(
+                (errs, { errors }: ResponseErrorObject): Error[] => ([...errs, ...(errors || [])]),
+                [],
+            );
     }
 
     protected getHeaders(error: Exception): OutgoingHttpHeaders {
         return [error, error.origin]
             .filter(Boolean)
-            .reduce((obj, { headers }: ResponseErrorObject) => {
-                return {
+            .reduce(
+                (obj, { headers }: ResponseErrorObject): OutgoingHttpHeaders => ({
                     ...obj,
                     ...(headers || {})
-                };
-            }, {});
+                }),
+                {},
+            );
     }
 }

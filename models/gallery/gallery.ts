@@ -1,3 +1,4 @@
+import { Type } from '@tsed/core';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { MaxLength, MinLength, Property, Required } from '@tsed/schema';
 import { CreateGallery } from './create-gallery';
@@ -19,7 +20,7 @@ export class Gallery {
     @Required()
     public name: string;
 
-    @OneToMany(() => GalleryItem, (item) => item.gallery)
+    @OneToMany((): Type => GalleryItem, (item): Gallery => item.gallery)
     public items: GalleryItem[];
 
     @Column()
